@@ -1,12 +1,10 @@
 package src.UI.Layout;
 
-import src.Database.Database;
 import src.UI.Components.*;
 import src.UI.Screen;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.concurrent.ExecutionException;
 
 public class FormCadastro extends JLabel {
     private final Screen screen;
@@ -38,63 +36,63 @@ public class FormCadastro extends JLabel {
             createaComponents();
         });
 
-        Input inputNome = new Input("Nome", 75, 75, 250);
+        Input inputName = new Input("Nome", 75, 75, 250);
         Input inputCPF;
         if (!isRestaurant) {
             inputCPF = new Input("CPF", 75, 145, 250);
         } else {
             inputCPF = new Input("CNPJ", 75, 145, 250);
         }
-        Input inputPosicaoX = new Input("Posição (X)", 75, 215, 115);
-        Input inputPosicaoY = new Input("Posição (Y)", 210, 215, 115);
-        InputSenha inputSenha = new InputSenha("Senha", 75, 285, 250);
+        Input inputPositionX = new Input("Posição (X)", 75, 215, 115);
+        Input inputPositionY = new Input("Posição (Y)", 210, 215, 115);
+        InputSenha inputPassword = new InputSenha("Senha", 75, 285, 250);
 
-        JButton botaoLogin = new JButton("Já tem uma conta? Entre!");
-        botaoLogin.setFont(new Font("Arial", Font.BOLD,10));
-        botaoLogin.setBackground(new Color(170,170,170));
-        botaoLogin.setBorder(null);
-        botaoLogin.setFocusable(false);
-        botaoLogin.setBounds(150, 355, 175, 20);
-        botaoLogin.addActionListener(e -> {
+        JButton buttonLogin = new JButton("Já tem uma conta? Entre!");
+        buttonLogin.setFont(new Font("Arial", Font.BOLD,10));
+        buttonLogin.setBackground(new Color(170,170,170));
+        buttonLogin.setBorder(null);
+        buttonLogin.setFocusable(false);
+        buttonLogin.setBounds(150, 355, 175, 20);
+        buttonLogin.addActionListener(e -> {
             this.screen.login.setVisible(true);
-            this.screen.cadastro.setVisible(false);
+            this.screen.register.setVisible(false);
 
-            inputNome.clearContent();
+            inputName.clearContent();
             inputCPF.clearContent();
-            inputPosicaoX.clearContent();
-            inputPosicaoY.clearContent();
-            inputSenha.clearContent();
+            inputPositionX.clearContent();
+            inputPositionY.clearContent();
+            inputPassword.clearContent();
         });
 
 
-        JButton cadastrar = new JButton("Cadastrar");
-        cadastrar.setFont(new Font("Arial", Font.BOLD,20));
-        cadastrar.setFocusable(false);
-        cadastrar.setBounds(150, 375, 100, 40);
-        cadastrar.addActionListener(e -> {
+        JButton registerButton = new JButton("Cadastrar");
+        registerButton.setFont(new Font("Arial", Font.BOLD,20));
+        registerButton.setFocusable(false);
+        registerButton.setBounds(150, 375, 100, 40);
+        registerButton.addActionListener(e -> {
             try {
-                String name = inputNome.inputContent();
+                String name = inputName.inputContent();
                 String cpfCnpj = inputCPF.inputContent();
-                int posicaoX = Integer.parseInt(inputPosicaoX.inputContent());
-                int posicaoY = Integer.parseInt(inputPosicaoY.inputContent());
-                String senha = inputSenha.inputContent();
+                int positionX = Integer.parseInt(inputPositionX.inputContent());
+                int positionY = Integer.parseInt(inputPositionY.inputContent());
+                String password = inputPassword.inputContent();
 
 
                 if (!isRestaurant) {
                     screen.application.registerUser(
                             name,
                             cpfCnpj,
-                            posicaoX,
-                            posicaoY,
-                            senha
+                            positionX,
+                            positionY,
+                            password
                     );
                 } else {
                     screen.application.registerRestaurant(
                             name,
                             cpfCnpj,
-                            posicaoX,
-                            posicaoY,
-                            senha
+                            positionX,
+                            positionY,
+                            password
                     );
                 }
 
@@ -103,21 +101,21 @@ public class FormCadastro extends JLabel {
                 JOptionPane.showMessageDialog(null, "Fill in the fields correctly");
             }
 
-            inputNome.clearContent();
+            inputName.clearContent();
             inputCPF.clearContent();
-            inputPosicaoX.clearContent();
-            inputPosicaoY.clearContent();
-            inputSenha.clearContent();
+            inputPositionX.clearContent();
+            inputPositionY.clearContent();
+            inputPassword.clearContent();
         });
 
         this.add(titleForm);
         this.add(restaurantCheckBox);
-        this.add(inputNome);
+        this.add(inputName);
         this.add(inputCPF);
-        this.add(inputPosicaoX);
-        this.add(inputPosicaoY);
-        this.add(inputSenha);
-        this.add(botaoLogin);
-        this.add(cadastrar);
+        this.add(inputPositionX);
+        this.add(inputPositionY);
+        this.add(inputPassword);
+        this.add(buttonLogin);
+        this.add(registerButton);
     }
 }

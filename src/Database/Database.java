@@ -41,9 +41,7 @@ public class Database {
 
     public void createUser(String name, String cpf, int positionX, int positionY, String password) {
         String hexPassword = HashPassword.hexPassword(password);
-
         String INSERIR = "INSERT INTO users (name, cpf, positionX, positionY, password) VALUES (?, ?, ?, ?, ?)";
-
 
         try {
             Connection conn = conectar();
@@ -68,9 +66,7 @@ public class Database {
 
     public void createRestaurant(String name, String cnpj, int positionX, int positionY, String password) {
         String hexPassword = HashPassword.hexPassword(password);
-
         String INSERIR = "INSERT INTO restaurants (name, cnpj, positionX, positionY, password) VALUES (?, ?, ?, ?, ?)";
-
 
         try {
             Connection conn = conectar();
@@ -95,7 +91,6 @@ public class Database {
 
     public User verifyAcountUser(String name, String password) {
         String hexPassword = HashPassword.hexPassword(password);
-
         String VERIFY = "SELECT * FROM users WHERE name=? AND password=?";
 
         try {
@@ -135,7 +130,6 @@ public class Database {
 
     public User verifyAcountRestaurant(String name, String password) {
         String hexPassword = HashPassword.hexPassword(password);
-
         String VERIFY = "SELECT * FROM restaurants WHERE name=? AND password=?";
 
         try {
@@ -175,6 +169,7 @@ public class Database {
     public ArrayList<Restaurant> getAllRestaurants() {
         String getAllRestaurants = "SELECT * FROM restaurants";
         ArrayList<Restaurant> listaRestaurants = new ArrayList<>();
+
         try {
             Connection conn = conectar();
             PreparedStatement restaurant = conn.prepareStatement(getAllRestaurants);
@@ -205,6 +200,7 @@ public class Database {
     public Restaurant getRestaurant(int id) {
         String getRestaurant = "SELECT * FROM restaurants WHERE id=?";
         Restaurant restaurante = null;
+
         try {
             Connection conn = conectar();
             PreparedStatement restaurant = conn.prepareStatement(getRestaurant);
@@ -234,6 +230,7 @@ public class Database {
     public ArrayList<Food> getAllFoods(int id) {
         String getAllFoods = "SELECT * FROM foods WHERE idRestaurant=? AND active=?";
         ArrayList<Food> listFoods = new ArrayList<>();
+
         try {
             Connection conn = conectar();
             PreparedStatement food = conn.prepareStatement(getAllFoods);

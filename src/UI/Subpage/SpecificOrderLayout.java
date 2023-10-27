@@ -8,7 +8,6 @@ import src.UI.Components.Line;
 import src.UI.Components.NoItemsText;
 import src.UI.Layout.LabelSpecificOrder;
 import src.UI.Pages.Delivery;
-import src.UI.Screen;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,11 +40,8 @@ public class SpecificOrderLayout extends JPanel {
         label.setFont(new Font("Arial", Font.BOLD,30));
         this.add(label);
 
-        JLabel linha = new JLabel();
-        linha.setBounds(125, 160, 500, 1);
-        linha.setBackground(new Color(180,180,180));
-        linha.setOpaque(true);
-        this.add(linha);
+        Line line = new Line(160);
+        this.add(line);
 
         Database database = new Database();
         ArrayList<ArrayList<Object>> listItemsInOrder = database.getSpecificOrder(orderBank.id);
@@ -57,10 +53,10 @@ public class SpecificOrderLayout extends JPanel {
             panel.setBackground(new Color(240, 240, 240));
             panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-            for (ArrayList<Object> pedidoLanche: listItemsInOrder) {
-                Food food = (Food) pedidoLanche.get(0);
-                int qntLanche = (int) pedidoLanche.get(1);
-                totalPriceValue += food.preco * qntLanche;
+            for (ArrayList<Object> orderFood : listItemsInOrder) {
+                Food food = (Food) orderFood.get(0);
+                int qntLanche = (int) orderFood.get(1);
+                totalPriceValue += food.price * qntLanche;
 
                 LabelSpecificOrder labelSpecificOrder = new LabelSpecificOrder(food, qntLanche);
 

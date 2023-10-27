@@ -28,7 +28,7 @@ public class RestaurantSpecificPage extends JPanel {
 
         restaurant.setListLanches();
 
-        JLabel label = new JLabel(restaurant.nome);
+        JLabel label = new JLabel(restaurant.name);
         label.setBounds(125,90,500,40);
         label.setFont(new Font("Arial", Font.BOLD,30));
         this.add(label);

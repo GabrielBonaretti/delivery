@@ -64,7 +64,7 @@ public class ListRestaurantLayout extends JPanel {
 
         int count = 0;
         for (Restaurant restaurant : listRestaurants) {
-            if (restaurant.nome.contains(textInput)) {
+            if (restaurant.name.contains(textInput)) {
                 count ++;
                 listFilteredRestaurants.add(restaurant);
             }

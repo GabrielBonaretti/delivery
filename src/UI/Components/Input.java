@@ -4,14 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Input extends JLabel {
-    private JTextField input;
+    private final JTextField input;
 
-    public Input(String textoEmCima, int x, int y, int width) {
+    public Input(String text, int x, int y, int width) {
         this.setBounds(x, y, width, 70);
 
         JLabel texto = new JLabel();
         texto.setFont(new Font("Arial", Font.BOLD,15));
-        texto.setText(textoEmCima);
+        texto.setText(text);
         texto.setBounds(0,0, width, 30);
 
         this.input = new JTextField();

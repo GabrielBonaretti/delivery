@@ -6,8 +6,8 @@ import src.UI.Screen;
 import javax.swing.*;
 import java.awt.*;
 
-public class Cadastro extends JPanel{
-    public Cadastro(Screen screen) {
+public class Register extends JPanel{
+    public Register(Screen screen) {
         this.setBounds(0,0, 1000, 800);
         this.setBackground(new Color(240,240,240));
         this.setLayout(null);

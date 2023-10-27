@@ -12,7 +12,6 @@ import src.UI.Pages.Delivery;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.concurrent.ExecutionException;
 
 public class MyRestaurantLayout extends JPanel {
     public Delivery delivery;
@@ -37,7 +36,7 @@ public class MyRestaurantLayout extends JPanel {
         restaurant.setId(this.application.user.id);
         restaurant.setListLanches();
 
-        Title title = new Title(restaurant.nome, 450);
+        Title title = new Title(restaurant.name, 450);
         this.add(title);
 
         Line line1 = new Line(160);
@@ -72,10 +71,10 @@ public class MyRestaurantLayout extends JPanel {
         addFood.setBounds(575, 170, 50, 40);
         addFood.addActionListener(e -> {
             try {
-                String nome = nameFoodInput.getText();
-                Double preco = Double.valueOf(priceFoodInput.getText());
+                String nameInput = nameFoodInput.getText();
+                Double priceInput = Double.valueOf(priceFoodInput.getText());
 
-                Food food = new Food(nome, preco);
+                Food food = new Food(nameInput, priceInput);
                 restaurant.addFood(food);
             } catch (Exception exception) {
                 JOptionPane.showMessageDialog(null, "Fill in the fields correctly");

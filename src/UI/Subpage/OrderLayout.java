@@ -41,11 +41,11 @@ public class OrderLayout extends JPanel {
         this.add(line);
 
 
-        if (!this.application.order.carrinho.isEmpty()) {
+        if (!this.application.order.cart.isEmpty()) {
             JPanel panel = new JPanel();
             panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-            for (ArrayList<Object> pedidoLanche: this.application.order.carrinho) {
+            for (ArrayList<Object> pedidoLanche: this.application.order.cart) {
                 Food food = (Food) pedidoLanche.get(0);
                 int qntLanche = (int) pedidoLanche.get(1);
 
@@ -87,7 +87,7 @@ public class OrderLayout extends JPanel {
         JButton doOrder = new JButton("Fazer pedido");
         doOrder.setBounds(475, 650, 150, 40);
         doOrder.setFont(new Font("Arial", Font.BOLD,15));
-        doOrder.setEnabled(!application.order.carrinho.isEmpty());
+        doOrder.setEnabled(!application.order.cart.isEmpty());
         doOrder.addActionListener(e -> {
             Date data = new Date();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

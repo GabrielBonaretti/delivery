@@ -19,15 +19,15 @@ public class LancheLabel extends JLabel {
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
 
-        JLabel nome = new JLabel(food.nome);
-        nome.setFont(new Font("Arial", Font.BOLD,15));
-        nome.setBounds(30, 0, 270, 50);
-        this.add(nome);
+        JLabel name = new JLabel(food.name);
+        name.setFont(new Font("Arial", Font.BOLD,15));
+        name.setBounds(30, 0, 270, 50);
+        this.add(name);
 
-        JLabel preco = new JLabel("R$ "+ food.preco);
-        preco.setFont(new Font("Arial", Font.BOLD,15));
-        preco.setBounds(340, 0, 100, 50);
-        this.add(preco);
+        JLabel price = new JLabel("R$ "+ food.price);
+        price.setFont(new Font("Arial", Font.BOLD,15));
+        price.setBounds(340, 0, 100, 50);
+        this.add(price);
 
         JButton button = new JButton("+");
         button.setFont(new Font("Arial", Font.BOLD,20));
@@ -36,9 +36,9 @@ public class LancheLabel extends JLabel {
         button.setBorder(null);
         button.setFocusable(false);
         button.addActionListener(e -> {
-            if (application.order.restaurant != null && !Objects.equals(application.order.restaurant.nome, restaurant.nome)) {
+            if (application.order.restaurant != null && !Objects.equals(application.order.restaurant.name, restaurant.name)) {
                 application.order.restaurant = restaurant;
-                application.order.carrinho.clear();
+                application.order.cart.clear();
                 delivery.orderLayout.createRequests();
             } else {
                 application.order.restaurant = restaurant;

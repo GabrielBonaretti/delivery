@@ -1,7 +1,7 @@
 package src.UI;
 
 import src.Entities.Application;
-import src.UI.Pages.Cadastro;
+import src.UI.Pages.Register;
 import src.UI.Pages.Delivery;
 import src.UI.Pages.Login;
 
@@ -9,7 +9,7 @@ import javax.swing.*;
 
 public class Screen extends JFrame{
     public Login login;
-    public Cadastro cadastro;
+    public Register register;
     public Delivery delivery;
     public Application application;
 
@@ -29,9 +29,9 @@ public class Screen extends JFrame{
         this.add(login);
         this.login.show(true);
 
-        this.cadastro = new Cadastro(this);
-        this.add(cadastro);
-        this.cadastro.show(false);
+        this.register = new Register(this);
+        this.add(register);
+        this.register.show(false);
 
         this.delivery = new Delivery(this);
         this.add(delivery);

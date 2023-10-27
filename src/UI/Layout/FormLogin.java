@@ -1,7 +1,6 @@
 package src.UI.Layout;
 
 import src.Database.Database;
-import src.Entities.Order;
 import src.Entities.User;
 import src.UI.Components.*;
 import src.UI.Screen;
@@ -21,7 +20,6 @@ public class FormLogin extends JLabel {
 
         createaComponents();
     }
-
 
     public void createaComponents() {
         this.removeAll();
@@ -49,30 +47,30 @@ public class FormLogin extends JLabel {
             createaComponents();
         });
 
-        Input inputNome = new Input("Nome", 75, 150, 250);
-        InputSenha inputSenha = new InputSenha("Senha", 75, 220, 250);
+        Input inputName = new Input("Nome", 75, 150, 250);
+        InputSenha inputPassword = new InputSenha("Senha", 75, 220, 250);
 
-        JButton botaoCadastrar = new JButton("Não tem uma conta? Cadastre-se!");
-        botaoCadastrar.setFont(new Font("Arial", Font.BOLD,10));
-        botaoCadastrar.setBackground(new Color(170,170,170));
-        botaoCadastrar.setBorder(null);
-        botaoCadastrar.setFocusable(false);
-        botaoCadastrar.setBounds(150, 290, 175, 20);
-        botaoCadastrar.addActionListener(e -> {
+        JButton buttonRegister = new JButton("Não tem uma conta? Cadastre-se!");
+        buttonRegister.setFont(new Font("Arial", Font.BOLD,10));
+        buttonRegister.setBackground(new Color(170,170,170));
+        buttonRegister.setBorder(null);
+        buttonRegister.setFocusable(false);
+        buttonRegister.setBounds(150, 290, 175, 20);
+        buttonRegister.addActionListener(e -> {
             this.screen.login.setVisible(false);
-            this.screen.cadastro.setVisible(true);
+            this.screen.register.setVisible(true);
 
-            inputNome.clearContent();
-            inputSenha.clearContent();
+            inputName.clearContent();
+            inputPassword.clearContent();
         });
 
-        JButton avancar = new JButton("Entrar");
-        avancar.setFont(new Font("Arial", Font.BOLD,20));
-        avancar.setFocusable(false);
-        avancar.setBounds(150, 350, 100, 40);
-        avancar.addActionListener(e -> {
-            String name = inputNome.inputContent();
-            String password = inputSenha.inputContent();
+        JButton loginButton = new JButton("Entrar");
+        loginButton.setFont(new Font("Arial", Font.BOLD,20));
+        loginButton.setFocusable(false);
+        loginButton.setBounds(150, 350, 100, 40);
+        loginButton.addActionListener(e -> {
+            String name = inputName.inputContent();
+            String password = inputPassword.inputContent();
 
             Database database = new Database();
             User user;
@@ -110,15 +108,15 @@ public class FormLogin extends JLabel {
                 JOptionPane.showMessageDialog(null, "No user find");
             }
 
-            inputNome.clearContent();
-            inputSenha.clearContent();
+            inputName.clearContent();
+            inputPassword.clearContent();
         });
 
         this.add(titleForm);
-        this.add(inputNome);
-        this.add(inputSenha);
-        this.add(botaoCadastrar);
-        this.add(avancar);
+        this.add(inputName);
+        this.add(inputPassword);
+        this.add(buttonRegister);
+        this.add(loginButton);
         this.add(restaurantCheckBox);
 
     }

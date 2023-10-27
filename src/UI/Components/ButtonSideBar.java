@@ -1,14 +1,12 @@
 package src.UI.Components;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
-import java.io.IOException;
 
-public class BotaoSideBar extends JButton {
+public class ButtonSideBar extends JButton {
     public int buttonChoice;
-    public BotaoSideBar(String text, int y, String textImg, int buttonChoice) {
+    public ButtonSideBar(String text, int y, String textImg, int buttonChoice) {
         super(text);
         this.buttonChoice = buttonChoice;
         ImageIcon imageButton = new ImageIcon(textImg);

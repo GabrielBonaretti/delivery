@@ -6,25 +6,24 @@ import java.util.ArrayList;
 
 public class Restaurant {
     public int id;
-    public String nome;
-    public Address localizacao;
-
+    public String name;
+    public Address address;
 
     public ArrayList<Food> listLanches = new ArrayList<Food>();
 
-    public Restaurant(String nome, Address localizacao) {
-        this.nome = nome;
-        this.localizacao = localizacao;
+    public Restaurant(String name, Address address) {
+        this.name = name;
+        this.address = address;
     }
 
     public void addFood(Food food) {
         Database database = new Database();
-        database.addFood(id, food.nome, food.preco);
+        database.addFood(id, food.name, food.price);
     }
 
-    public void removeFood(int lancheId) {
+    public void removeFood(int foodId) {
         Database database = new Database();
-        database.deleteFood(lancheId);
+        database.deleteFood(foodId);
     }
 
     public void setListLanches() {

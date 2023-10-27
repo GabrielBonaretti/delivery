@@ -9,7 +9,7 @@ import java.util.Objects;
 public class Order {
     public Restaurant restaurant;
     public User user;
-    public ArrayList<ArrayList<Object>> carrinho = new ArrayList<ArrayList<Object>>();
+    public ArrayList<ArrayList<Object>> cart = new ArrayList<ArrayList<Object>>();
 
     public void setUser(User user) {
         this.user = user;
@@ -17,32 +17,32 @@ public class Order {
 
     public void doOrder(Food food) {
         boolean alreadyExists = false;
-        if (carrinho.toArray().length != 0) {
-            for (ArrayList<Object> lanchePedido: carrinho) {
-                Food teste = (Food) lanchePedido.get(0);
-                if (Objects.equals(teste.nome, food.nome)) {
-                    int quantidade = (int) lanchePedido.get(1);
-                    lanchePedido.set(1, quantidade + 1);
+        if (cart.toArray().length != 0) {
+            for (ArrayList<Object> itemOrder: cart) {
+                Food foodOrder = (Food) itemOrder.get(0);
+                if (Objects.equals(foodOrder.name, food.name)) {
+                    int quantidade = (int) itemOrder.get(1);
+                    itemOrder.set(1, quantidade + 1);
                     alreadyExists = true;
                 }
             }
         }
 
         if (!alreadyExists) {
-            ArrayList<Object> lanchePedido = new ArrayList<Object>();
-            lanchePedido.add(food);
-            lanchePedido.add(1);
-            this.carrinho.add(lanchePedido);
+            ArrayList<Object> foodOrder = new ArrayList<Object>();
+            foodOrder.add(food);
+            foodOrder.add(1);
+            this.cart.add(foodOrder);
         }
     }
 
     public double getSumValues() {
         double sumTotal = 0;
-        if (carrinho.toArray().length != 0) {
-            for (ArrayList<Object> lanchePedido: carrinho) {
-                Food food = (Food) lanchePedido.get(0);
-                int amount = (int) lanchePedido.get(1);
-                sumTotal += food.preco * amount;
+        if (cart.toArray().length != 0) {
+            for (ArrayList<Object> foodOrder: cart) {
+                Food food = (Food) foodOrder.get(0);
+                int amount = (int) foodOrder.get(1);
+                sumTotal += food.price * amount;
             }
         }
         return sumTotal;
@@ -50,17 +50,16 @@ public class Order {
 
     public void saveOrder(String date, double totalPrice) {
         Database database = new Database();
-        System.out.println(this.user.id);
         database.addOrder(user.id, date, totalPrice);
         int idLastOrder = database.getLastOrder();
 
-        for (ArrayList<Object> lanchePedido: carrinho) {
-            Food food = (Food) lanchePedido.get(0);
-            int amount = (int) lanchePedido.get(1);
+        for (ArrayList<Object> foodOrder: cart) {
+            Food food = (Food) foodOrder.get(0);
+            int amount = (int) foodOrder.get(1);
             database.setOrderFood(idLastOrder, food.id, amount);
         }
 
-        carrinho.clear();
+        cart.clear();
         JOptionPane.showMessageDialog(null, "Pedido realizado com sucesso");
     }
 

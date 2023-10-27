@@ -19,11 +19,11 @@ public class RestauranteLabel extends JLabel {
         ImageIcon image = new ImageIcon("src/Resources/lunch.png");
         image.setImage(image.getImage().getScaledInstance(40,40, Image.SCALE_DEFAULT));
 
-        JLabel textName = new JLabel(restaurant.nome);
+        JLabel textName = new JLabel(restaurant.name);
         textName.setFont(new Font("Arial", Font.BOLD,15));
         textName.setBounds(110, 0, 150, 50);
 
-        String restaurantPosition = restaurant.localizacao.posicaoX+", "+ restaurant.localizacao.posicaoY;
+        String restaurantPosition = restaurant.address.positionX+", "+ restaurant.address.positionY;
         JLabel textPosition = new JLabel(restaurantPosition);
         textPosition.setFont(new Font("Arial", Font.BOLD,15));
         textPosition.setBounds(270, 0, 50, 50);

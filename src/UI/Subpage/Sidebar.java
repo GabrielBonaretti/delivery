@@ -1,6 +1,6 @@
 package src.UI.Subpage;
 
-import src.UI.Components.BotaoSideBar;
+import src.UI.Components.ButtonSideBar;
 import src.UI.Pages.Delivery;
 import src.UI.Screen;
 
@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Sidebar extends JPanel {
-    private ArrayList<BotaoSideBar> listaBotoes = new ArrayList<BotaoSideBar>();
+    private final ArrayList<ButtonSideBar> listButton = new ArrayList<ButtonSideBar>();
     public Delivery delivery;
     public Screen screen;
     public Sidebar(Delivery delivey, Screen screen) {
@@ -23,8 +23,8 @@ public class Sidebar extends JPanel {
     }
 
     public void limpandoCor() {
-        for (BotaoSideBar botao: listaBotoes) {
-            botao.setBackground(new Color(200, 200, 200));
+        for (ButtonSideBar button : listButton) {
+            button.setBackground(new Color(200, 200, 200));
         }
     }
 
@@ -33,44 +33,44 @@ public class Sidebar extends JPanel {
         this.repaint();
         this.revalidate();
 
-        BotaoSideBar botaoSair;
-        BotaoSideBar botaoMeuRestaurantes;
-        BotaoSideBar botaoListarRestaurantes;
-        BotaoSideBar carrinho;
-        BotaoSideBar historico;
+        ButtonSideBar buttonExit;
+        ButtonSideBar buttonMyRestaurant;
+        ButtonSideBar buttonListRestaurant;
+        ButtonSideBar buttonCart;
+        ButtonSideBar buttonHistory;
 
         if (isRestaurante) {
-            botaoMeuRestaurantes = new BotaoSideBar("Meu restaurante", 0, "src/Resources/loja.png",2);
-            botaoMeuRestaurantes.setBackground(new Color(170, 170, 170));
+            buttonMyRestaurant = new ButtonSideBar("Meu restaurante", 0, "src/Resources/loja.png",2);
+            buttonMyRestaurant.setBackground(new Color(170, 170, 170));
 
-            botaoSair = new BotaoSideBar("Sair", 40, "src/Resources/logout.png", 4);
-            listaBotoes.add(botaoMeuRestaurantes);
-            listaBotoes.add(botaoSair);
-            this.add(botaoMeuRestaurantes);
+            buttonExit = new ButtonSideBar("Sair", 40, "src/Resources/logout.png", 4);
+            listButton.add(buttonMyRestaurant);
+            listButton.add(buttonExit);
+            this.add(buttonMyRestaurant);
         } else {
-            botaoListarRestaurantes = new BotaoSideBar("Listar restaurantes", 0, "src/Resources/lista.png",0);
-            botaoListarRestaurantes.setBackground(new Color(170, 170, 170));
+            buttonListRestaurant = new ButtonSideBar("Listar restaurantes", 0, "src/Resources/lista.png",0);
+            buttonListRestaurant.setBackground(new Color(170, 170, 170));
 
-            carrinho = new BotaoSideBar("Carrinho", 40, "src/Resources/cart.png",1);
-            historico = new BotaoSideBar("Historico", 80, "src/Resources/history.png",3);
-            botaoSair = new BotaoSideBar("Sair", 120, "src/Resources/logout.png",4);
-            listaBotoes.add(botaoListarRestaurantes);
-            listaBotoes.add(carrinho);
-            listaBotoes.add(historico);
-            listaBotoes.add(botaoSair);
-            this.add(botaoListarRestaurantes);
-            this.add(historico);
-            this.add(carrinho);
+            buttonCart = new ButtonSideBar("Carrinho", 40, "src/Resources/cart.png",1);
+            buttonHistory = new ButtonSideBar("Historico", 80, "src/Resources/history.png",3);
+            buttonExit = new ButtonSideBar("Sair", 120, "src/Resources/logout.png",4);
+            listButton.add(buttonListRestaurant);
+            listButton.add(buttonCart);
+            listButton.add(buttonHistory);
+            listButton.add(buttonExit);
+            this.add(buttonListRestaurant);
+            this.add(buttonHistory);
+            this.add(buttonCart);
         }
-        this.add(botaoSair);
+        this.add(buttonExit);
 
 
-        for (BotaoSideBar botao: listaBotoes) {
-            botao.addActionListener(e -> {
+        for (ButtonSideBar button : listButton) {
+            button.addActionListener(e -> {
                 limpandoCor();
-                botao.setBackground(new Color(170, 170, 170));
+                button.setBackground(new Color(170, 170, 170));
 
-                switch (botao.buttonChoice) {
+                switch (button.buttonChoice) {
                     case 0:
                         this.delivery.listRestaurantLayout.setVisible(true);
                         this.delivery.orderLayout.setVisible(false);
@@ -116,7 +116,7 @@ public class Sidebar extends JPanel {
                     case 4:
                         this.screen.delivery.setVisible(false);
                         this.screen.login.setVisible(true);
-                        this.screen.application.order.carrinho.clear();
+                        this.screen.application.order.cart.clear();
                         this.delivery.orderLayout.createRequests();
                         break;
                 }

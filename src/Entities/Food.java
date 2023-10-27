@@ -2,12 +2,12 @@ package src.Entities;
 
 public class Food {
     public int id;
-    public String nome;
-    public double preco;
+    public String name;
+    public double price;
 
-    public Food(String nome, double preco) {
-        this.nome = nome;
-        this.preco = preco;
+    public Food(String name, double price) {
+        this.name = name;
+        this.price = price;
     }
 
     public void setId(int id) {

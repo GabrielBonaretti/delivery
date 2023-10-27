@@ -17,15 +17,15 @@ public class LabelMyRestaurantFood extends JLabel {
         this.setBackground(new Color(180,180,180));
 
 
-        JLabel nome = new JLabel(food.nome);
-        nome.setFont(new Font("Arial", Font.BOLD,15));
-        nome.setBounds(30, 0, 270, 50);
-        this.add(nome);
+        JLabel name = new JLabel(food.name);
+        name.setFont(new Font("Arial", Font.BOLD,15));
+        name.setBounds(30, 0, 270, 50);
+        this.add(name);
 
-        JLabel preco = new JLabel("R$ "+ food.preco);
-        preco.setFont(new Font("Arial", Font.BOLD,15));
-        preco.setBounds(340, 0, 100, 50);
-        this.add(preco);
+        JLabel price = new JLabel("R$ "+ food.price);
+        price.setFont(new Font("Arial", Font.BOLD,15));
+        price.setBounds(340, 0, 100, 50);
+        this.add(price);
 
         JButton button = new JButton("-");
         button.setFont(new Font("Arial", Font.BOLD,20));

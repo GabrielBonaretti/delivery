@@ -15,20 +15,20 @@ public class LabelOrder extends JLabel {
         this.setOpaque(true);
         this.setBackground(new Color(180,180,180));;
 
-        JLabel nome = new JLabel(String.valueOf(orderBank.id));
-        nome.setFont(new Font("Arial", Font.BOLD,15));
-        nome.setBounds(30, 0, 25, 50);
-        this.add(nome);
+        JLabel name = new JLabel(String.valueOf(orderBank.id));
+        name.setFont(new Font("Arial", Font.BOLD,15));
+        name.setBounds(30, 0, 25, 50);
+        this.add(name);
 
-        JLabel data = new JLabel(orderBank.date);
-        data.setFont(new Font("Arial", Font.BOLD,15));
-        data.setBounds(80, 0, 200, 50);
-        this.add(data);
+        JLabel date = new JLabel(orderBank.date);
+        date.setFont(new Font("Arial", Font.BOLD,15));
+        date.setBounds(80, 0, 200, 50);
+        this.add(date);
 
-        JLabel preco = new JLabel("Preço total: R$ "+ orderBank.totalPrice);
-        preco.setFont(new Font("Arial", Font.BOLD,15));
-        preco.setBounds(250, 0, 200, 50);
-        this.add(preco);
+        JLabel price = new JLabel("Preço total: R$ "+ orderBank.totalPrice);
+        price.setFont(new Font("Arial", Font.BOLD,15));
+        price.setBounds(250, 0, 200, 50);
+        this.add(price);
 
         JButton button = new JButton("...");
         button.setFont(new Font("Arial", Font.BOLD,15));
