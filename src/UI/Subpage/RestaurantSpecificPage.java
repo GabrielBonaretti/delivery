@@ -1,14 +1,12 @@
 package src.UI.Subpage;
 
-import src.Database.Database;
-import src.Entities.Lanche;
-import src.Entities.Restaurante;
+import src.Entities.Food;
+import src.Entities.Restaurant;
 import src.UI.Layout.LancheLabel;
 import src.UI.Pages.Delivery;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class RestaurantSpecificPage extends JPanel {
     public Delivery delivery;
@@ -21,14 +19,14 @@ public class RestaurantSpecificPage extends JPanel {
         this.setOpaque(true);
     }
 
-    public void createComponents(Restaurante restaurante) {
+    public void createComponents(Restaurant restaurant) {
         this.removeAll();
         this.revalidate();
         this.repaint();
 
-        restaurante.setListaLanches();
+        restaurant.setListaLanches();
 
-        JLabel label = new JLabel(restaurante.nome);
+        JLabel label = new JLabel(restaurant.nome);
         label.setBounds(125,90,500,40);
         label.setFont(new Font("Arial", Font.BOLD,30));
         this.add(label);
@@ -39,13 +37,13 @@ public class RestaurantSpecificPage extends JPanel {
         linha.setOpaque(true);
         this.add(linha);
 
-        if (restaurante.listaLanches.toArray().length > 0) {
+        if (restaurant.listaLanches.toArray().length > 0) {
             JPanel panel = new JPanel();
             panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
             panel.setVisible(true);
 
-            for (Lanche lanche: restaurante.listaLanches) {
-                LancheLabel lancheLabel = new LancheLabel(lanche, delivery, restaurante);
+            for (Food food : restaurant.listaLanches) {
+                LancheLabel lancheLabel = new LancheLabel(food, delivery, restaurant);
                 lancheLabel.setVisible(true);
                 panel.add(lancheLabel);
 
@@ -57,6 +55,7 @@ public class RestaurantSpecificPage extends JPanel {
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             scrollPane.setVisible(true);
             scrollPane.setBorder(null);
+            scrollPane.getVerticalScrollBar().setUnitIncrement(50);
             scrollPane.setBounds(125, 190, 500, 500);
             this.add(scrollPane);
         } else {

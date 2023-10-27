@@ -1,5 +1,6 @@
 package src.UI;
 
+import src.Entities.Application;
 import src.UI.Pages.Cadastro;
 import src.UI.Pages.Delivery;
 import src.UI.Pages.Login;
@@ -10,11 +11,16 @@ public class Screen extends JFrame{
     public Login login;
     public Cadastro cadastro;
     public Delivery delivery;
+    public Application application;
+
+
 
     public Screen() {
-
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1000, 800);
+
+        this.application = new Application();
+
         this.setResizable(false);
         this.setLayout(null);
 

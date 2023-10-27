@@ -1,8 +1,8 @@
 package src.UI.Subpage;
 
 import src.Database.Database;
-import src.Entities.Lanche;
-import src.Entities.Order;
+import src.Entities.Food;
+import src.Entities.OrderBank;
 import src.UI.Components.NoItemsText;
 import src.UI.Layout.LabelSpecificOrder;
 import src.UI.Pages.Delivery;
@@ -12,7 +12,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class SpecificOrderLayout extends JPanel {
-    public Order order;
+    public OrderBank orderBank;
     public Delivery delivery;
     public SpecificOrderLayout(Delivery delivery) {
         this.delivery = delivery;
@@ -22,8 +22,8 @@ public class SpecificOrderLayout extends JPanel {
         this.setOpaque(true);
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrder(OrderBank orderBank) {
+        this.orderBank = orderBank;
     }
 
     public void createComponents() {
@@ -31,7 +31,7 @@ public class SpecificOrderLayout extends JPanel {
         this.repaint();
         this.revalidate();
 
-        JLabel label = new JLabel(order.id + " | " + order.date);
+        JLabel label = new JLabel(orderBank.id + " | " + orderBank.date);
         label.setBounds(125,90,500,40);
         label.setFont(new Font("Arial", Font.BOLD,30));
         this.add(label);
@@ -43,17 +43,17 @@ public class SpecificOrderLayout extends JPanel {
         this.add(linha);
 
         Database database = new Database();
-        ArrayList<ArrayList<Object>> listItemsInOrder = database.getSpecificOrder(order.id);
+        ArrayList<ArrayList<Object>> listItemsInOrder = database.getSpecificOrder(orderBank.id);
 
         if (!listItemsInOrder.isEmpty()) {
             JPanel panel = new JPanel();
             panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
             for (ArrayList<Object> pedidoLanche: listItemsInOrder) {
-                Lanche lanche = (Lanche) pedidoLanche.get(0);
+                Food food = (Food) pedidoLanche.get(0);
                 int qntLanche = (int) pedidoLanche.get(1);
 
-                LabelSpecificOrder labelSpecificOrder = new LabelSpecificOrder(lanche, qntLanche);
+                LabelSpecificOrder labelSpecificOrder = new LabelSpecificOrder(food, qntLanche);
 
                 panel.add(labelSpecificOrder);
                 panel.add(Box.createRigidArea(new Dimension(0, 20)));
@@ -63,6 +63,7 @@ public class SpecificOrderLayout extends JPanel {
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             scrollPane.setVisible(true);
             scrollPane.setBorder(null);
+            scrollPane.getVerticalScrollBar().setUnitIncrement(50);
             scrollPane.setBounds(125, 190, 500, 400);
             this.add(scrollPane);
         } else {

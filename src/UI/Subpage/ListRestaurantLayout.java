@@ -1,9 +1,7 @@
 package src.UI.Subpage;
 
 import src.Database.Database;
-import src.Entities.Endereco;
-import src.Entities.Lanche;
-import src.Entities.Restaurante;
+import src.Entities.Restaurant;
 import src.UI.Components.Line;
 import src.UI.Layout.RestauranteLabel;
 import src.UI.Pages.Delivery;
@@ -14,8 +12,8 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class ListRestaurantLayout extends JPanel {
-    private ArrayList<Restaurante> listRestaurants = new ArrayList<Restaurante>();
-    private ArrayList<Restaurante> listFilteredRestaurants = new ArrayList<Restaurante>();
+    private ArrayList<Restaurant> listRestaurants = new ArrayList<Restaurant>();
+    private ArrayList<Restaurant> listFilteredRestaurants = new ArrayList<Restaurant>();
     private JLabel restaurantsListLabel;
     private JButton prev;
     private JButton next;
@@ -33,8 +31,8 @@ public class ListRestaurantLayout extends JPanel {
     public void setRestaurants() {
         for(int i = 0; i < 6; i++) {
             try {
-                Restaurante restaurante = listFilteredRestaurants.get(i + 6*countPage);
-                RestauranteLabel restauranteLabel = new RestauranteLabel(restaurante, i*70, this.delivery);
+                Restaurant restaurant = listFilteredRestaurants.get(i + 6*countPage);
+                RestauranteLabel restauranteLabel = new RestauranteLabel(restaurant, i*70, this.delivery);
                 restaurantsListLabel.add(restauranteLabel);
             } catch (Exception e) {
                 break;
@@ -64,10 +62,10 @@ public class ListRestaurantLayout extends JPanel {
         listFilteredRestaurants.clear();
 
         int count = 0;
-        for (Restaurante restaurante: listRestaurants) {
-            if (restaurante.nome.contains(textInput)) {
+        for (Restaurant restaurant : listRestaurants) {
+            if (restaurant.nome.contains(textInput)) {
                 count ++;
-                listFilteredRestaurants.add(restaurante);
+                listFilteredRestaurants.add(restaurant);
             }
         }
 
@@ -104,7 +102,7 @@ public class ListRestaurantLayout extends JPanel {
         Database database = new Database();
         this.listRestaurants = database.getAllRestaurants();
 
-        listFilteredRestaurants = (ArrayList<Restaurante>) listRestaurants.stream().collect(Collectors.toList());
+        listFilteredRestaurants = (ArrayList<Restaurant>) listRestaurants.stream().collect(Collectors.toList());
 
         JTextField inputSearch = new JTextField();
         inputSearch.setBounds(225,90,250,40);

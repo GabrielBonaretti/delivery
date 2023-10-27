@@ -1,6 +1,7 @@
 package src.UI.Layout;
 
 import src.Database.Database;
+import src.Entities.User;
 import src.UI.Components.*;
 import src.UI.Screen;
 
@@ -73,30 +74,32 @@ public class FormLogin extends JLabel {
             String password = inputSenha.inputContent();
 
             Database database = new Database();
-            int userID;
+            User user;
 
             if (!isRestaurant) {
-                userID = database.verifyAcountUser(name,password);
+                user = database.verifyAcountUser(name,password);
                 this.screen.delivery.listRestaurantLayout.setVisible(true);
                 this.screen.delivery.orderLayout.setVisible(false);
                 this.screen.delivery.restaurantSpecificPage.setVisible(false);
                 this.screen.delivery.myRestaurantLayout.setVisible(false);
+
+
             } else {
-                userID = database.verifyAcountRestaurant(name,password);
+                user = database.verifyAcountRestaurant(name,password);
                 this.screen.delivery.listRestaurantLayout.setVisible(false);
                 this.screen.delivery.restaurantSpecificPage.setVisible(false);
                 this.screen.delivery.orderLayout.setVisible(false);
                 this.screen.delivery.myRestaurantLayout.setVisible(true);
             }
 
-            if (userID > 0) {
+            if (user.id > 0) {
                 this.screen.login.setVisible(false);
                 this.screen.delivery.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(null, "Dont user find");
             }
 
-            this.screen.delivery.id = userID;
+            this.screen.delivery.setUser(user);
             this.screen.delivery.sidebar.createComponents(isRestaurant);
 
             if (!isRestaurant) {

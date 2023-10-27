@@ -1,6 +1,6 @@
 package src.UI.Layout;
 
-import src.Entities.Lanche;
+import src.Entities.Food;
 import src.UI.Pages.Delivery;
 import src.UI.Subpage.OrderLayout;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class LabelOrderLayoutFood extends JLabel {
     public LabelOrderLayoutFood(
-            Lanche lanche,
+            Food food,
             int qntLanche,
             ArrayList<Object> pedidoLanche,
             Delivery delivery,
@@ -23,7 +23,7 @@ public class LabelOrderLayoutFood extends JLabel {
         this.setBackground(new Color(240,240,240));
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
-        JLabel nome = new JLabel(lanche.nome);
+        JLabel nome = new JLabel(food.nome);
         nome.setFont(new Font("Arial", Font.BOLD,15));
         nome.setBounds(30, 0, 270, 50);
         this.add(nome);
@@ -33,7 +33,7 @@ public class LabelOrderLayoutFood extends JLabel {
         quantidade.setBounds(250, 0, 50, 50);
         this.add(quantidade);
 
-        JLabel preco = new JLabel("R$ "+lanche.preco);
+        JLabel preco = new JLabel("R$ "+ food.preco);
         preco.setFont(new Font("Arial", Font.BOLD,15));
         preco.setBounds(340, 0, 100, 50);
         this.add(preco);
@@ -49,7 +49,7 @@ public class LabelOrderLayoutFood extends JLabel {
             if (qnt > 1) {
                 pedidoLanche.set(1,  qnt - 1);
             } else {
-                delivery.pedido.carrinho.remove(pedidoLanche);
+                delivery.order.carrinho.remove(pedidoLanche);
             }
             orderLayout.createRequests();
         });

@@ -1,9 +1,9 @@
 package src.Entities;
 
-public class Endereco {
+public class Address {
     public int posicaoX;
     public int posicaoY;
-    public Endereco(int posicaoX, int posicaoY) {
+    public Address(int posicaoX, int posicaoY) {
         this.posicaoX = posicaoX;
         this.posicaoY = posicaoY;
     }

@@ -1,8 +1,7 @@
 package src.UI.Subpage;
 
 import src.Database.Database;
-import src.Entities.Lanche;
-import src.Entities.Order;
+import src.Entities.OrderBank;
 import src.UI.Components.Line;
 import src.UI.Components.NoItemsText;
 import src.UI.Components.Title;
@@ -21,7 +20,6 @@ public class HistoricLayout extends JPanel {
         this.setBackground(new Color(240,240,240));
         this.setLayout(null);
         this.setOpaque(true);
-        createComponents();
     }
 
     public void createComponents() {
@@ -36,14 +34,14 @@ public class HistoricLayout extends JPanel {
         this.add(line);
 
         Database database = new Database();
-        ArrayList<Order> allOrders = database.getAllOrders(delivery.id);
+        ArrayList<OrderBank> allOrderBanks = database.getAllOrders(delivery.user.id);
 
-        if (!allOrders.isEmpty()) {
+        if (!allOrderBanks.isEmpty()) {
             JPanel panel = new JPanel();
             panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-            for (Order order: allOrders) {
-                LabelOrder labelOrder = new LabelOrder(delivery, order);
+            for (OrderBank orderBank : allOrderBanks) {
+                LabelOrder labelOrder = new LabelOrder(delivery, orderBank);
 
                 panel.add(labelOrder);
                 panel.add(Box.createRigidArea(new Dimension(0, 20)));
@@ -54,6 +52,7 @@ public class HistoricLayout extends JPanel {
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             scrollPane.setVisible(true);
             scrollPane.setBorder(null);
+            scrollPane.getVerticalScrollBar().setUnitIncrement(50);
             scrollPane.setBounds(125, 200, 500, 500);
             this.add(scrollPane);
         } else {

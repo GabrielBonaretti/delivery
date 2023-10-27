@@ -94,7 +94,7 @@ public class Database {
         }
     }
 
-    public int verifyAcountUser(String name, String password) {
+    public User verifyAcountUser(String name, String password) {
         String hexPassword = HashPassword.hexPassword(password);
 
         String VERIFY = "SELECT * FROM users WHERE name=? AND password=?";
@@ -109,23 +109,32 @@ public class Database {
             ResultSet resultado = user.executeQuery();
 
             if (resultado.isBeforeFirst() && resultado.next()) {
-                int idUser = resultado.getInt(1);
+                Address address = new Address(resultado.getInt(4), resultado.getInt(5));
+
+                User userObject = new User(
+                    resultado.getInt(1),
+                    resultado.getString(2),
+                    address,
+                    resultado.getString(3)
+                );
+
                 user.close();
                 desconectar(conn);
-                return idUser;
+
+                return userObject;
             } else {
                 user.close();
                 desconectar(conn);
-                return 0;
+                return null;
             }
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(-42);
         }
-        return 0;
+        return null;
     }
 
-    public int verifyAcountRestaurant(String name, String password) {
+    public User verifyAcountRestaurant(String name, String password) {
         String hexPassword = HashPassword.hexPassword(password);
 
         String VERIFY = "SELECT * FROM restaurants WHERE name=? AND password=?";
@@ -140,25 +149,33 @@ public class Database {
             ResultSet resultado = user.executeQuery();
 
             if (resultado.isBeforeFirst() && resultado.next()) {
-                int idUser = resultado.getInt(1);
+                Address address = new Address(resultado.getInt(4), resultado.getInt(5));
+
+                User userObject = new User(
+                        resultado.getInt(1),
+                        resultado.getString(2),
+                        address,
+                        resultado.getString(3)
+                );
+
                 user.close();
                 desconectar(conn);
-                return idUser;
+                return userObject;
             } else {
                 user.close();
                 desconectar(conn);
-                return 0;
+                return null;
             }
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(-42);
         }
-        return 0;
+        return null;
     }
 
-    public ArrayList<Restaurante> getAllRestaurants() {
+    public ArrayList<Restaurant> getAllRestaurants() {
         String getAllRestaurants = "SELECT * FROM restaurants";
-        ArrayList<Restaurante> listaRestaurants = new ArrayList<>();
+        ArrayList<Restaurant> listaRestaurants = new ArrayList<>();
         try {
             Connection conn = conectar();
             PreparedStatement restaurant = conn.prepareStatement(getAllRestaurants);
@@ -167,8 +184,8 @@ public class Database {
 
             if (resultado.isBeforeFirst()) {
                 while (resultado.next()) {
-                    Endereco endereco = new Endereco(resultado.getInt(4),resultado.getInt(5));
-                    Restaurante restaurante = new Restaurante(resultado.getString(2), endereco);
+                    Address address = new Address(resultado.getInt(4),resultado.getInt(5));
+                    Restaurant restaurante = new Restaurant(resultado.getString(2), address);
                     restaurante.setId(resultado.getInt(1));
                     listaRestaurants.add(restaurante);
                 }
@@ -186,9 +203,9 @@ public class Database {
         return listaRestaurants;
     }
 
-    public Restaurante getRestaurant(int id) {
+    public Restaurant getRestaurant(int id) {
         String getRestaurant = "SELECT * FROM restaurants WHERE id=?";
-        Restaurante restaurante = null;
+        Restaurant restaurante = null;
         try {
             Connection conn = conectar();
             PreparedStatement restaurant = conn.prepareStatement(getRestaurant);
@@ -199,8 +216,8 @@ public class Database {
             ResultSet resultado = restaurant.executeQuery();
 
             if (resultado.isBeforeFirst() && resultado.next()) {
-                Endereco endereco = new Endereco(resultado.getInt(4),resultado.getInt(5));
-                restaurante = new Restaurante(resultado.getString(2), endereco);
+                Address address = new Address(resultado.getInt(4),resultado.getInt(5));
+                restaurante = new Restaurant(resultado.getString(2), address);
             } else {
                 System.out.println("Não existe esse restaurante.");
             }
@@ -215,9 +232,9 @@ public class Database {
         return restaurante;
     }
 
-    public ArrayList<Lanche> getAllFoods(int id) {
+    public ArrayList<Food> getAllFoods(int id) {
         String getAllFoods = "SELECT * FROM foods WHERE idRestaurant=? AND active=?";
-        ArrayList<Lanche> listFoods = new ArrayList<>();
+        ArrayList<Food> listFoods = new ArrayList<>();
         try {
             Connection conn = conectar();
             PreparedStatement food = conn.prepareStatement(getAllFoods);
@@ -229,7 +246,7 @@ public class Database {
 
             if (resultado.isBeforeFirst()) {
                 while (resultado.next()) {
-                    Lanche newFood = new Lanche(resultado.getString(3), resultado.getDouble(4));
+                    Food newFood = new Food(resultado.getString(3), resultado.getDouble(4));
                     newFood.setId(resultado.getInt(1));
                     listFoods.add(newFood);
                 }
@@ -346,9 +363,9 @@ public class Database {
         return idLastOrder;
     }
 
-    public ArrayList<Order> getAllOrders(int idUser) {
+    public ArrayList<OrderBank> getAllOrders(int idUser) {
         String getAllOrders = "SELECT * FROM orders WHERE idUser=? ORDER BY id DESC";
-        ArrayList<Order> listOrders = new ArrayList<>();
+        ArrayList<OrderBank> listOrderBanks = new ArrayList<>();
         try {
             Connection conn = conectar();
             PreparedStatement orders = conn.prepareStatement(getAllOrders);
@@ -359,8 +376,8 @@ public class Database {
 
             if (resultado.isBeforeFirst()) {
                 while (resultado.next()) {
-                    Order order = new Order(resultado.getInt(1), resultado.getString(3), resultado.getDouble(4));
-                    listOrders.add(order);
+                    OrderBank orderBank = new OrderBank(resultado.getInt(1), resultado.getString(3), resultado.getDouble(4));
+                    listOrderBanks.add(orderBank);
                 }
             } else {
                 System.out.println("Não existem foods na loja.");
@@ -373,7 +390,7 @@ public class Database {
             System.exit(-42);
         }
 
-        return listOrders;
+        return listOrderBanks;
     }
 
     public void setOrderFood(int idOrder, int idFood, int quantity) {
@@ -424,7 +441,7 @@ public class Database {
                     ResultSet resultadoFood = food.executeQuery();
 
                     if (resultadoFood.next()) {
-                        Lanche lanche = new Lanche(resultadoFood.getString(3), resultadoFood.getDouble(4));
+                        Food lanche = new Food(resultadoFood.getString(3), resultadoFood.getDouble(4));
 
                         itemOrder.add(lanche);
                         itemOrder.add(resultado.getInt(4));

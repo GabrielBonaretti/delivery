@@ -1,6 +1,6 @@
 package src.UI.Subpage;
 
-import src.Entities.Lanche;
+import src.Entities.Food;
 import src.UI.Components.Line;
 import src.UI.Components.NoItemsText;
 import src.UI.Components.Title;
@@ -38,16 +38,16 @@ public class OrderLayout extends JPanel {
         this.add(line);
 
 
-        if (!this.delivery.pedido.carrinho.isEmpty()) {
+        if (!this.delivery.order.carrinho.isEmpty()) {
             JPanel panel = new JPanel();
             panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-            for (ArrayList<Object> pedidoLanche: this.delivery.pedido.carrinho) {
-                Lanche lanche = (Lanche) pedidoLanche.get(0);
+            for (ArrayList<Object> pedidoLanche: this.delivery.order.carrinho) {
+                Food food = (Food) pedidoLanche.get(0);
                 int qntLanche = (int) pedidoLanche.get(1);
 
                 LabelOrderLayoutFood labelOrderLayoutFood = new LabelOrderLayoutFood(
-                        lanche,
+                        food,
                         qntLanche,
                         pedidoLanche,
                         this.delivery,
@@ -64,6 +64,7 @@ public class OrderLayout extends JPanel {
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             scrollPane.setVisible(true);
             scrollPane.setBorder(null);
+            scrollPane.getVerticalScrollBar().setUnitIncrement(50);
             scrollPane.setBounds(125, 190, 500, 400);
             this.add(scrollPane);
         } else {
@@ -74,7 +75,7 @@ public class OrderLayout extends JPanel {
         Line line2 = new Line(620);
         this.add(line2);
 
-        double totalPriceValue = delivery.pedido.getSumValues();
+        double totalPriceValue = delivery.order.getSumValues();
         JLabel totalPrice = new JLabel("Total price: "+ totalPriceValue);
         totalPrice.setBounds(125, 650, 500, 40);
         totalPrice.setFont(new Font("Arial", Font.BOLD,15));
@@ -83,7 +84,7 @@ public class OrderLayout extends JPanel {
         JButton doOrder = new JButton("Fazer pedido");
         doOrder.setBounds(475, 650, 150, 40);
         doOrder.setFont(new Font("Arial", Font.BOLD,15));
-        doOrder.setEnabled(!delivery.pedido.carrinho.isEmpty());
+        doOrder.setEnabled(!delivery.order.carrinho.isEmpty());
         doOrder.addActionListener(e -> {
             Date data = new Date();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -91,7 +92,7 @@ public class OrderLayout extends JPanel {
             DateFormat hora = DateFormat.getTimeInstance();
             String dataFormated = sdf.format(data) + " " + hora.format(data);
 
-            delivery.pedido.saveOrder(delivery.id, dataFormated, totalPriceValue);
+            delivery.order.saveOrder(delivery.user.id, dataFormated, totalPriceValue);
 
             createRequests();
         });

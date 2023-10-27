@@ -1,9 +1,8 @@
 package src.UI.Subpage;
 
 import src.Database.Database;
-import src.Entities.Endereco;
-import src.Entities.Lanche;
-import src.Entities.Restaurante;
+import src.Entities.Food;
+import src.Entities.Restaurant;
 import src.UI.Components.Line;
 import src.UI.Components.NoItemsText;
 import src.UI.Components.Title;
@@ -12,7 +11,6 @@ import src.UI.Pages.Delivery;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class MyRestaurantLayout extends JPanel {
     public Delivery delivery;
@@ -31,11 +29,11 @@ public class MyRestaurantLayout extends JPanel {
 
         Database database = new Database();
 
-        Restaurante restaurante = database.getRestaurant(this.delivery.id);
-        restaurante.setId(this.delivery.id);
-        restaurante.setListaLanches();
+        Restaurant restaurant = database.getRestaurant(this.delivery.user.id);
+        restaurant.setId(this.delivery.user.id);
+        restaurant.setListaLanches();
 
-        Title title = new Title(restaurante.nome, 450);
+        Title title = new Title(restaurant.nome, 450);
         this.add(title);
 
         Line line1 = new Line(160);
@@ -72,8 +70,8 @@ public class MyRestaurantLayout extends JPanel {
             String nome = nameFoodInput.getText();
             Double preco = Double.valueOf(priceFoodInput.getText());
 
-            Lanche lanche = new Lanche(nome, preco);
-            restaurante.adicionarLanche(lanche);
+            Food food = new Food(nome, preco);
+            restaurant.addFood(food);
 
             createComponents();
         });
@@ -82,15 +80,15 @@ public class MyRestaurantLayout extends JPanel {
         Line line2 = new Line(220);
         this.add(line2);
 
-        if (!restaurante.listaLanches.isEmpty()) {
+        if (!restaurant.listaLanches.isEmpty()) {
             JPanel panel = new JPanel();
             panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
             panel.setVisible(true);
 
-            for (Lanche lanche: restaurante.listaLanches) {
+            for (Food food : restaurant.listaLanches) {
                 LabelMyRestaurantFood labelMyRestaurantFood = new LabelMyRestaurantFood(
-                        lanche,
-                        restaurante,
+                        food,
+                        restaurant,
                         this
                 );
 
@@ -103,6 +101,7 @@ public class MyRestaurantLayout extends JPanel {
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             scrollPane.setVisible(true);
             scrollPane.setBorder(null);
+            scrollPane.getVerticalScrollBar().setUnitIncrement(50);
             scrollPane.setBounds(125, 230, 500, 400);
             this.add(scrollPane);
         } else {
