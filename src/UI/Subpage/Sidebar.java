@@ -116,7 +116,7 @@ public class Sidebar extends JPanel {
                     case 4:
                         this.screen.delivery.setVisible(false);
                         this.screen.login.setVisible(true);
-                        this.delivery.order.carrinho.clear();
+                        this.screen.application.order.carrinho.clear();
                         this.delivery.orderLayout.createRequests();
                         break;
                 }

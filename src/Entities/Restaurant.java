@@ -8,7 +8,9 @@ public class Restaurant {
     public int id;
     public String nome;
     public Address localizacao;
-    public ArrayList<Food> listaLanches = new ArrayList<Food>();
+
+
+    public ArrayList<Food> listLanches = new ArrayList<Food>();
 
     public Restaurant(String nome, Address localizacao) {
         this.nome = nome;
@@ -25,15 +27,18 @@ public class Restaurant {
         database.deleteFood(lancheId);
     }
 
-    public void setListaLanches() {
+    public void setListLanches() {
         Database database = new Database();
         ArrayList<Food> listFoods = database.getAllFoods(this.id);
-        this.listaLanches.clear();
-        this.listaLanches = listFoods;
+        this.listLanches.clear();
+        this.listLanches = listFoods;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
+    public ArrayList<Food> getListLanches() {
+        return listLanches;
+    }
 }

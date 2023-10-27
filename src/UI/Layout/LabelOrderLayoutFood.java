@@ -1,7 +1,9 @@
 package src.UI.Layout;
 
+import src.Entities.Application;
 import src.Entities.Food;
 import src.UI.Pages.Delivery;
+import src.UI.Screen;
 import src.UI.Subpage.OrderLayout;
 
 import javax.swing.*;
@@ -10,10 +12,10 @@ import java.util.ArrayList;
 
 public class LabelOrderLayoutFood extends JLabel {
     public LabelOrderLayoutFood(
+            Application application,
             Food food,
             int qntLanche,
             ArrayList<Object> pedidoLanche,
-            Delivery delivery,
             OrderLayout orderLayout
     ) {
         this.setPreferredSize(new Dimension(500, 50));
@@ -49,7 +51,7 @@ public class LabelOrderLayoutFood extends JLabel {
             if (qnt > 1) {
                 pedidoLanche.set(1,  qnt - 1);
             } else {
-                delivery.order.carrinho.remove(pedidoLanche);
+                application.order.carrinho.remove(pedidoLanche);
             }
             orderLayout.createRequests();
         });

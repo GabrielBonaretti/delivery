@@ -1,5 +1,6 @@
 package src.UI.Subpage;
 
+import src.Entities.Application;
 import src.Entities.Food;
 import src.UI.Components.Line;
 import src.UI.Components.NoItemsText;
@@ -16,8 +17,10 @@ import java.util.Date;
 
 public class OrderLayout extends JPanel {
     public Delivery delivery;
-    public OrderLayout(Delivery delivery) {
+    public Application application;
+    public OrderLayout(Delivery delivery, Application application) {
         this.delivery = delivery;
+        this.application = application;
         this.setBounds(250, 0, 750, 800);
         this.setBackground(new Color(240,240,240));
         this.setOpaque(true);
@@ -38,19 +41,19 @@ public class OrderLayout extends JPanel {
         this.add(line);
 
 
-        if (!this.delivery.order.carrinho.isEmpty()) {
+        if (!this.application.order.carrinho.isEmpty()) {
             JPanel panel = new JPanel();
             panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-            for (ArrayList<Object> pedidoLanche: this.delivery.order.carrinho) {
+            for (ArrayList<Object> pedidoLanche: this.application.order.carrinho) {
                 Food food = (Food) pedidoLanche.get(0);
                 int qntLanche = (int) pedidoLanche.get(1);
 
                 LabelOrderLayoutFood labelOrderLayoutFood = new LabelOrderLayoutFood(
+                        application,
                         food,
                         qntLanche,
                         pedidoLanche,
-                        this.delivery,
                         this
                 );
 
@@ -75,7 +78,7 @@ public class OrderLayout extends JPanel {
         Line line2 = new Line(620);
         this.add(line2);
 
-        double totalPriceValue = delivery.order.getSumValues();
+        double totalPriceValue = application.order.getSumValues();
         JLabel totalPrice = new JLabel("Total price: "+ totalPriceValue);
         totalPrice.setBounds(125, 650, 500, 40);
         totalPrice.setFont(new Font("Arial", Font.BOLD,15));
@@ -84,7 +87,7 @@ public class OrderLayout extends JPanel {
         JButton doOrder = new JButton("Fazer pedido");
         doOrder.setBounds(475, 650, 150, 40);
         doOrder.setFont(new Font("Arial", Font.BOLD,15));
-        doOrder.setEnabled(!delivery.order.carrinho.isEmpty());
+        doOrder.setEnabled(!application.order.carrinho.isEmpty());
         doOrder.addActionListener(e -> {
             Date data = new Date();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -92,7 +95,7 @@ public class OrderLayout extends JPanel {
             DateFormat hora = DateFormat.getTimeInstance();
             String dataFormated = sdf.format(data) + " " + hora.format(data);
 
-            delivery.order.saveOrder(delivery.user.id, dataFormated, totalPriceValue);
+            application.order.saveOrder(dataFormated, totalPriceValue);
 
             createRequests();
         });

@@ -6,6 +6,7 @@ import src.UI.Screen;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.concurrent.ExecutionException;
 
 public class FormCadastro extends JLabel {
     private final Screen screen;
@@ -71,30 +72,35 @@ public class FormCadastro extends JLabel {
         cadastrar.setFocusable(false);
         cadastrar.setBounds(150, 375, 100, 40);
         cadastrar.addActionListener(e -> {
-            String name = inputNome.inputContent();
-            String cpfCnpj = inputCPF.inputContent();
-            int posicaoX = Integer.parseInt(inputPosicaoX.inputContent());
-            int posicaoY = Integer.parseInt(inputPosicaoY.inputContent());
-            String senha = inputSenha.inputContent();
+            try {
+                String name = inputNome.inputContent();
+                String cpfCnpj = inputCPF.inputContent();
+                int posicaoX = Integer.parseInt(inputPosicaoX.inputContent());
+                int posicaoY = Integer.parseInt(inputPosicaoY.inputContent());
+                String senha = inputSenha.inputContent();
 
-            Database database = new Database();
 
-            if (!isRestaurant) {
-                database.createUser(
-                        name,
-                        cpfCnpj,
-                        posicaoX,
-                        posicaoY,
-                        senha
-                );
-            } else {
-                database.createRestaurant(
-                        name,
-                        cpfCnpj,
-                        posicaoX,
-                        posicaoY,
-                        senha
-                );
+                if (!isRestaurant) {
+                    screen.application.registerUser(
+                            name,
+                            cpfCnpj,
+                            posicaoX,
+                            posicaoY,
+                            senha
+                    );
+                } else {
+                    screen.application.registerRestaurant(
+                            name,
+                            cpfCnpj,
+                            posicaoX,
+                            posicaoY,
+                            senha
+                    );
+                }
+
+
+            } catch (Exception exception) {
+                JOptionPane.showMessageDialog(null, "Fill in the fields correctly");
             }
 
             inputNome.clearContent();
@@ -102,7 +108,6 @@ public class FormCadastro extends JLabel {
             inputPosicaoX.clearContent();
             inputPosicaoY.clearContent();
             inputSenha.clearContent();
-
         });
 
         this.add(titleForm);

@@ -62,7 +62,6 @@ public class Database {
             System.out.println("O usuario " + name + " foi inserido com sucesso!");
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("Erro salvando o produto");
             System.exit(-42);
         }
     }
@@ -312,7 +311,6 @@ public class Database {
             desconectar(conn);
         } catch (SQLException e) {
             e.printStackTrace();
-            System.err.println("Erro ao atualizar o produto");
             System.exit(-42);
         }
     }

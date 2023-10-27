@@ -27,27 +27,27 @@ public class Delivery extends JPanel {
         this.sidebar = new Sidebar(this, screen);
         this.add(sidebar);
 
-        this.listRestaurantLayout = new ListRestaurantLayout(this);
+        this.listRestaurantLayout = new ListRestaurantLayout(this, screen.application);
         this.add(listRestaurantLayout);
         this.listRestaurantLayout.setVisible(false);
 
-        this.orderLayout = new OrderLayout(this);
+        this.orderLayout = new OrderLayout(this, screen.application);
         this.add(orderLayout);
         this.listRestaurantLayout.setVisible(false);
 
-        this.myRestaurantLayout = new MyRestaurantLayout(this);
+        this.myRestaurantLayout = new MyRestaurantLayout(this, screen.application);
         this.add(myRestaurantLayout);
         this.listRestaurantLayout.setVisible(false);
 
-        this.restaurantSpecificPage = new RestaurantSpecificPage(this);
+        this.restaurantSpecificPage = new RestaurantSpecificPage(this, screen.application);
         this.add(restaurantSpecificPage);
         this.restaurantSpecificPage.setVisible(false);
 
-        this.historicLayout = new HistoricLayout(this);
+        this.historicLayout = new HistoricLayout(this, screen.application);
         this.add(historicLayout);
         this.historicLayout.setVisible(false);
 
-        this.specificOrderLayout = new SpecificOrderLayout(this);
+        this.specificOrderLayout = new SpecificOrderLayout(this, screen.application);
         this.add(specificOrderLayout);
         this.specificOrderLayout.setVisible(false);
     }

@@ -1,6 +1,6 @@
 package src.UI.Subpage;
 
-import src.Database.Database;
+import src.Entities.Application;
 import src.Entities.Restaurant;
 import src.UI.Components.Line;
 import src.UI.Layout.RestauranteLabel;
@@ -9,7 +9,6 @@ import src.UI.Pages.Delivery;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class ListRestaurantLayout extends JPanel {
     private ArrayList<Restaurant> listRestaurants = new ArrayList<Restaurant>();
@@ -19,9 +18,11 @@ public class ListRestaurantLayout extends JPanel {
     private JButton next;
     private int countPage;
     public Delivery delivery;
+    public Application application;
 
-    public ListRestaurantLayout(Delivery delivery) {
+    public ListRestaurantLayout(Delivery delivery, Application application) {
         this.delivery = delivery;
+        this.application = application;
         this.setBounds(250, 0, 750, 800);
         this.setBackground(new Color(240,240,240));
         this.setLayout(null);
@@ -99,10 +100,9 @@ public class ListRestaurantLayout extends JPanel {
         this.repaint();
         this.revalidate();
 
-        Database database = new Database();
-        this.listRestaurants = database.getAllRestaurants();
+        this.listRestaurants = application.restaurants;
 
-        listFilteredRestaurants = (ArrayList<Restaurant>) listRestaurants.stream().collect(Collectors.toList());
+        listFilteredRestaurants = (ArrayList<Restaurant>) new ArrayList<>(listRestaurants);
 
         JTextField inputSearch = new JTextField();
         inputSearch.setBounds(225,90,250,40);

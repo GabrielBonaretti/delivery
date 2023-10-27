@@ -1,12 +1,14 @@
 package src.UI.Subpage;
 
 import src.Database.Database;
+import src.Entities.Application;
 import src.Entities.OrderBank;
 import src.UI.Components.Line;
 import src.UI.Components.NoItemsText;
 import src.UI.Components.Title;
 import src.UI.Layout.LabelOrder;
 import src.UI.Pages.Delivery;
+import src.UI.Screen;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,8 +16,10 @@ import java.util.ArrayList;
 
 public class HistoricLayout extends JPanel {
     public Delivery delivery;
-    public HistoricLayout(Delivery delivery) {
+    public Application application;
+    public HistoricLayout(Delivery delivery, Application application) {
         this.delivery = delivery;
+        this.application = application;
         this.setBounds(250, 0, 750, 800);
         this.setBackground(new Color(240,240,240));
         this.setLayout(null);
@@ -34,7 +38,7 @@ public class HistoricLayout extends JPanel {
         this.add(line);
 
         Database database = new Database();
-        ArrayList<OrderBank> allOrderBanks = database.getAllOrders(delivery.user.id);
+        ArrayList<OrderBank> allOrderBanks = database.getAllOrders(application.user.id);
 
         if (!allOrderBanks.isEmpty()) {
             JPanel panel = new JPanel();

@@ -1,6 +1,7 @@
 package src.UI.Layout;
 
 import src.Database.Database;
+import src.Entities.Order;
 import src.Entities.User;
 import src.UI.Components.*;
 import src.UI.Screen;
@@ -83,7 +84,6 @@ public class FormLogin extends JLabel {
                 this.screen.delivery.restaurantSpecificPage.setVisible(false);
                 this.screen.delivery.myRestaurantLayout.setVisible(false);
 
-
             } else {
                 user = database.verifyAcountRestaurant(name,password);
                 this.screen.delivery.listRestaurantLayout.setVisible(false);
@@ -92,21 +92,24 @@ public class FormLogin extends JLabel {
                 this.screen.delivery.myRestaurantLayout.setVisible(true);
             }
 
-            if (user.id > 0) {
+            if (user != null) {
                 this.screen.login.setVisible(false);
                 this.screen.delivery.setVisible(true);
+
+                this.screen.application.order.setUser(user);
+                this.screen.application.setUser(user);
+                this.screen.application.getAllRestaurant();
+                this.screen.delivery.sidebar.createComponents(isRestaurant);
+
+                if (!isRestaurant) {
+                    this.screen.delivery.listRestaurantLayout.createComponents();
+                } else {
+                    this.screen.delivery.myRestaurantLayout.createComponents();
+                }
             } else {
-                JOptionPane.showMessageDialog(null, "Dont user find");
+                JOptionPane.showMessageDialog(null, "No user find");
             }
 
-            this.screen.delivery.setUser(user);
-            this.screen.delivery.sidebar.createComponents(isRestaurant);
-
-            if (!isRestaurant) {
-                this.screen.delivery.listRestaurantLayout.createComponents();
-            } else {
-                this.screen.delivery.myRestaurantLayout.createComponents();
-            }
             inputNome.clearContent();
             inputSenha.clearContent();
         });

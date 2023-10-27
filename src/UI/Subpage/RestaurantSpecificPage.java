@@ -1,5 +1,6 @@
 package src.UI.Subpage;
 
+import src.Entities.Application;
 import src.Entities.Food;
 import src.Entities.Restaurant;
 import src.UI.Layout.LancheLabel;
@@ -10,9 +11,10 @@ import java.awt.*;
 
 public class RestaurantSpecificPage extends JPanel {
     public Delivery delivery;
-
-    public RestaurantSpecificPage(Delivery delivery) {
+    public Application application;
+    public RestaurantSpecificPage(Delivery delivery, Application application) {
         this.delivery = delivery;
+        this.application = application;
         this.setBounds(250, 0, 750, 800);
         this.setBackground(new Color(240,240,240));
         this.setLayout(null);
@@ -24,7 +26,7 @@ public class RestaurantSpecificPage extends JPanel {
         this.revalidate();
         this.repaint();
 
-        restaurant.setListaLanches();
+        restaurant.setListLanches();
 
         JLabel label = new JLabel(restaurant.nome);
         label.setBounds(125,90,500,40);
@@ -37,13 +39,13 @@ public class RestaurantSpecificPage extends JPanel {
         linha.setOpaque(true);
         this.add(linha);
 
-        if (restaurant.listaLanches.toArray().length > 0) {
+        if (!restaurant.getListLanches().isEmpty()) {
             JPanel panel = new JPanel();
             panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
             panel.setVisible(true);
 
-            for (Food food : restaurant.listaLanches) {
-                LancheLabel lancheLabel = new LancheLabel(food, delivery, restaurant);
+            for (Food food : restaurant.getListLanches()) {
+                LancheLabel lancheLabel = new LancheLabel(food, delivery, restaurant, application);
                 lancheLabel.setVisible(true);
                 panel.add(lancheLabel);
 

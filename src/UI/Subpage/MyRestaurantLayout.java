@@ -1,6 +1,7 @@
 package src.UI.Subpage;
 
 import src.Database.Database;
+import src.Entities.Application;
 import src.Entities.Food;
 import src.Entities.Restaurant;
 import src.UI.Components.Line;
@@ -11,11 +12,14 @@ import src.UI.Pages.Delivery;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.concurrent.ExecutionException;
 
 public class MyRestaurantLayout extends JPanel {
     public Delivery delivery;
-    public MyRestaurantLayout(Delivery delivery) {
+    public Application application;
+    public MyRestaurantLayout(Delivery delivery, Application application) {
         this.delivery = delivery;
+        this.application = application;
         this.setBounds(250, 0, 750, 800);
         this.setBackground(new Color(240,240,240));
         this.setLayout(null);
@@ -29,9 +33,9 @@ public class MyRestaurantLayout extends JPanel {
 
         Database database = new Database();
 
-        Restaurant restaurant = database.getRestaurant(this.delivery.user.id);
-        restaurant.setId(this.delivery.user.id);
-        restaurant.setListaLanches();
+        Restaurant restaurant = database.getRestaurant(this.application.user.id);
+        restaurant.setId(this.application.user.id);
+        restaurant.setListLanches();
 
         Title title = new Title(restaurant.nome, 450);
         this.add(title);
@@ -67,11 +71,15 @@ public class MyRestaurantLayout extends JPanel {
         JButton addFood = new JButton("+");
         addFood.setBounds(575, 170, 50, 40);
         addFood.addActionListener(e -> {
-            String nome = nameFoodInput.getText();
-            Double preco = Double.valueOf(priceFoodInput.getText());
+            try {
+                String nome = nameFoodInput.getText();
+                Double preco = Double.valueOf(priceFoodInput.getText());
 
-            Food food = new Food(nome, preco);
-            restaurant.addFood(food);
+                Food food = new Food(nome, preco);
+                restaurant.addFood(food);
+            } catch (Exception exception) {
+                JOptionPane.showMessageDialog(null, "Fill in the fields correctly");
+            }
 
             createComponents();
         });
@@ -80,12 +88,12 @@ public class MyRestaurantLayout extends JPanel {
         Line line2 = new Line(220);
         this.add(line2);
 
-        if (!restaurant.listaLanches.isEmpty()) {
+        if (!restaurant.getListLanches().isEmpty()) {
             JPanel panel = new JPanel();
             panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
             panel.setVisible(true);
 
-            for (Food food : restaurant.listaLanches) {
+            for (Food food : restaurant.getListLanches()) {
                 LabelMyRestaurantFood labelMyRestaurantFood = new LabelMyRestaurantFood(
                         food,
                         restaurant,

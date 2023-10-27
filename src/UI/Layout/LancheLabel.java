@@ -1,5 +1,6 @@
 package src.UI.Layout;
 
+import src.Entities.Application;
 import src.Entities.Food;
 import src.Entities.Restaurant;
 import src.UI.Pages.Delivery;
@@ -9,7 +10,7 @@ import java.awt.*;
 import java.util.Objects;
 
 public class LancheLabel extends JLabel {
-    public LancheLabel(Food food, Delivery delivery, Restaurant restaurant) {
+    public LancheLabel(Food food, Delivery delivery, Restaurant restaurant, Application application) {
         this.setPreferredSize(new Dimension(500, 50));
         this.setMinimumSize(new Dimension(500, 50));
         this.setMaximumSize(new Dimension(500, 50));
@@ -35,14 +36,14 @@ public class LancheLabel extends JLabel {
         button.setBorder(null);
         button.setFocusable(false);
         button.addActionListener(e -> {
-            if (delivery.order.restaurant != null && !Objects.equals(delivery.order.restaurant.nome, restaurant.nome)) {
-                delivery.order.restaurant = restaurant;
-                delivery.order.carrinho.clear();
+            if (application.order.restaurant != null && !Objects.equals(application.order.restaurant.nome, restaurant.nome)) {
+                application.order.restaurant = restaurant;
+                application.order.carrinho.clear();
                 delivery.orderLayout.createRequests();
             } else {
-                delivery.order.restaurant = restaurant;
+                application.order.restaurant = restaurant;
             }
-            delivery.order.doOrder(food);
+            application.order.doOrder(food);
             delivery.orderLayout.createRequests();
         });
         this.add(button);

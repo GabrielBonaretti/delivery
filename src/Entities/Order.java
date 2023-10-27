@@ -8,7 +8,12 @@ import java.util.Objects;
 
 public class Order {
     public Restaurant restaurant;
+    public User user;
     public ArrayList<ArrayList<Object>> carrinho = new ArrayList<ArrayList<Object>>();
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public void doOrder(Food food) {
         boolean alreadyExists = false;
@@ -43,9 +48,10 @@ public class Order {
         return sumTotal;
     }
 
-    public void saveOrder(int idUser, String date, double totalPrice) {
+    public void saveOrder(String date, double totalPrice) {
         Database database = new Database();
-        database.addOrder(idUser, date, totalPrice);
+        System.out.println(this.user.id);
+        database.addOrder(user.id, date, totalPrice);
         int idLastOrder = database.getLastOrder();
 
         for (ArrayList<Object> lanchePedido: carrinho) {
