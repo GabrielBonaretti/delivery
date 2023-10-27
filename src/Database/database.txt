@@ -41,6 +41,7 @@ create table OrderFoods (
     id int auto_increment primary key,
     idOrder int not null,
     idFood int not null,
+    quantity INT NOT NULL,
 	constraint fkOrder foreign key (idOrder) references orders(id),
 	constraint fkFood foreign key (idFood) references foods(id)
 );
