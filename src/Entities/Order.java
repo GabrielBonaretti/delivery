@@ -6,15 +6,37 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * The Order class represents an order made by a user in the application.
+ */
 public class Order {
+    // The restaurant associated with the order.
     public Restaurant restaurant;
+
+    // The user who placed the order.
     public User user;
+
+    // The list representing the items in the user's cart for the order.
+    // Each element is an ArrayList containing a Food object and the quantity of that food in the order.
     public ArrayList<ArrayList<Object>> cart = new ArrayList<ArrayList<Object>>();
 
+
+    /**
+     * Sets the user associated with the order.
+     *
+     * @param user The user to be set.
+     */
     public void setUser(User user) {
         this.user = user;
     }
 
+
+    /**
+     * Adds a food item to the user's cart for the order.
+     * If the item already exists in the cart, increments the quantity.
+     *
+     * @param food The food item to be added to the cart.
+     */
     public void doOrder(Food food) {
         boolean alreadyExists = false;
         if (cart.toArray().length != 0) {
@@ -36,6 +58,12 @@ public class Order {
         }
     }
 
+
+    /**
+     * Calculates the total price of the items in the user's cart.
+     *
+     * @return The total price of the items in the cart.
+     */
     public double getSumValues() {
         double sumTotal = 0;
         if (cart.toArray().length != 0) {
@@ -48,6 +76,13 @@ public class Order {
         return sumTotal;
     }
 
+
+    /**
+     * Saves the order to the database, including the associated foods and quantities.
+     *
+     * @param date       The date of the order.
+     * @param totalPrice The total price of the order.
+     */
     public void saveOrder(String date, double totalPrice) {
         Database database = new Database();
         database.addOrder(user.id, date, totalPrice);
@@ -63,7 +98,11 @@ public class Order {
         JOptionPane.showMessageDialog(null, "Pedido realizado com sucesso");
     }
 
-    public void printOrder() {
 
+    /**
+     * Prints the details of the order.
+     */
+    public void printOrder() {
+        // To be implemented
     }
 }

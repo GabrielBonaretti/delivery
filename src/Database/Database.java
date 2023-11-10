@@ -5,18 +5,30 @@ import src.Entities.*;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class Database {
 
-    public Connection conectar() {
-        String CLASSE_DRIVER = "com.mysql.cj.jdbc.Driver";
-        String USUARIO = "root";
-        String SENHA = "";
-        String URL_SERVIDOR = "jdbc:mysql://localhost:3306/delivery?useSSL=false";
+/**
+ * The Database class provides methods to interact with a MySQL database
+ * for managing users, restaurants, orders, and food items.
+ */
+public class Database {
+    /**
+     * Establishes a connection to the MySQL database.
+     *
+     * @return A Connection object representing the database connection.
+     */
+    public Connection connect() {
+        // Database connection parameters
+        String CLASS_DRIVER = "com.mysql.cj.jdbc.Driver";
+        String USER = "root";
+        String PASSWORD = "";
+        String URL_SERVER = "jdbc:mysql://localhost:3306/delivery?useSSL=false";
 
         try {
-            Class.forName(CLASSE_DRIVER);
-            return DriverManager.getConnection(URL_SERVIDOR, USUARIO, SENHA);
+            // Load the MySQL JDBC driver and establish a connection
+            Class.forName(CLASS_DRIVER);
+            return DriverManager.getConnection(URL_SERVER, USER, PASSWORD);
         } catch (Exception e) {
+            // Handle exceptions related to database connection
             if (e instanceof ClassNotFoundException) {
                 e.printStackTrace();
                 System.err.println("Verifique o driver de conexão");
@@ -28,7 +40,13 @@ public class Database {
         }
     }
 
-    public void desconectar(Connection conn) {
+
+    /**
+     * Closes the database connection.
+     *
+     * @param conn The Connection object to be closed.
+     */
+    public void disconnect(Connection conn) {
 
         if (conn != null) {
             try {
@@ -39,23 +57,33 @@ public class Database {
         }
     }
 
+
+    /**
+     * Creates a new user in the database.
+     *
+     * @param name     The name of the user.
+     * @param cpf      The CPF (Brazilian ID) of the user.
+     * @param positionX The X coordinate of the user's position.
+     * @param positionY The Y coordinate of the user's position.
+     * @param password The user's password.
+     */
     public void createUser(String name, String cpf, int positionX, int positionY, String password) {
         String hexPassword = HashPassword.hexPassword(password);
-        String INSERIR = "INSERT INTO users (name, cpf, positionX, positionY, password) VALUES (?, ?, ?, ?, ?)";
+        String INSERT_QUERY = "INSERT INTO users (name, cpf, positionX, positionY, password) VALUES (?, ?, ?, ?, ?)";
 
         try {
-            Connection conn = conectar();
-            PreparedStatement salvar = conn.prepareStatement(INSERIR);
+            Connection conn = connect();
+            PreparedStatement save = conn.prepareStatement(INSERT_QUERY);
 
-            salvar.setString(1, name);
-            salvar.setString(2, cpf);
-            salvar.setInt(3, positionX);
-            salvar.setInt(4, positionY);
-            salvar.setString(5, hexPassword);
+            save.setString(1, name);
+            save.setString(2, cpf);
+            save.setInt(3, positionX);
+            save.setInt(4, positionY);
+            save.setString(5, hexPassword);
 
-            salvar.executeUpdate();
-            salvar.close();
-            desconectar(conn);
+            save.executeUpdate();
+            save.close();
+            disconnect(conn);
 
             System.out.println("O usuario " + name + " foi inserido com sucesso!");
         } catch (Exception e) {
@@ -64,23 +92,33 @@ public class Database {
         }
     }
 
+
+    /**
+     * Creates a new restaurant in the database.
+     *
+     * @param name     The name of the restaurant.
+     * @param cnpj     The CNPJ (Brazilian business ID) of the restaurant.
+     * @param positionX The X coordinate of the restaurant's position.
+     * @param positionY The Y coordinate of the restaurant's position.
+     * @param password The restaurant's password.
+     */
     public void createRestaurant(String name, String cnpj, int positionX, int positionY, String password) {
         String hexPassword = HashPassword.hexPassword(password);
-        String INSERIR = "INSERT INTO restaurants (name, cnpj, positionX, positionY, password) VALUES (?, ?, ?, ?, ?)";
+        String INSERT_QUERY = "INSERT INTO restaurants (name, cnpj, positionX, positionY, password) VALUES (?, ?, ?, ?, ?)";
 
         try {
-            Connection conn = conectar();
-            PreparedStatement salvar = conn.prepareStatement(INSERIR);
+            Connection conn = connect();
+            PreparedStatement save = conn.prepareStatement(INSERT_QUERY);
 
-            salvar.setString(1, name);
-            salvar.setString(2, cnpj);
-            salvar.setInt(3, positionX);
-            salvar.setInt(4, positionY);
-            salvar.setString(5, hexPassword);
+            save.setString(1, name);
+            save.setString(2, cnpj);
+            save.setInt(3, positionX);
+            save.setInt(4, positionY);
+            save.setString(5, hexPassword);
 
-            salvar.executeUpdate();
-            salvar.close();
-            desconectar(conn);
+            save.executeUpdate();
+            save.close();
+            disconnect(conn);
 
             System.out.println("O usuario " + name + " foi inserido com sucesso!");
         } catch (Exception e) {
@@ -89,13 +127,21 @@ public class Database {
         }
     }
 
+
+    /**
+     * Verifies the user's account in the database.
+     *
+     * @param name     The name of the user.
+     * @param password The user's password.
+     * @return A User object if the account is verified, otherwise null.
+     */
     public User verifyAcountUser(String name, String password) {
         String hexPassword = HashPassword.hexPassword(password);
-        String VERIFY = "SELECT * FROM users WHERE name=? AND password=?";
+        String VERIFY_QUERY = "SELECT * FROM users WHERE name=? AND password=?";
 
         try {
-            Connection conn = conectar();
-            PreparedStatement user = conn.prepareStatement(VERIFY);
+            Connection conn = connect();
+            PreparedStatement user = conn.prepareStatement(VERIFY_QUERY);
 
             user.setString(1, name);
             user.setString(2, hexPassword);
@@ -113,12 +159,12 @@ public class Database {
                 );
 
                 user.close();
-                desconectar(conn);
+                disconnect(conn);
 
                 return userObject;
             } else {
                 user.close();
-                desconectar(conn);
+                disconnect(conn);
                 return null;
             }
         } catch (SQLException e) {
@@ -128,13 +174,21 @@ public class Database {
         return null;
     }
 
+
+    /**
+     * Verifies the restaurant's account in the database.
+     *
+     * @param name     The name of the restaurant.
+     * @param password The restaurant's password.
+     * @return A User object if the account is verified, otherwise null.
+     */
     public User verifyAcountRestaurant(String name, String password) {
         String hexPassword = HashPassword.hexPassword(password);
-        String VERIFY = "SELECT * FROM restaurants WHERE name=? AND password=?";
+        String VERIFY_QUERY = "SELECT * FROM restaurants WHERE name=? AND password=?";
 
         try {
-            Connection conn = conectar();
-            PreparedStatement user = conn.prepareStatement(VERIFY);
+            Connection conn = connect();
+            PreparedStatement user = conn.prepareStatement(VERIFY_QUERY);
 
             user.setString(1, name);
             user.setString(2, hexPassword);
@@ -152,11 +206,11 @@ public class Database {
                 );
 
                 user.close();
-                desconectar(conn);
+                disconnect(conn);
                 return userObject;
             } else {
                 user.close();
-                desconectar(conn);
+                disconnect(conn);
                 return null;
             }
         } catch (SQLException e) {
@@ -166,92 +220,112 @@ public class Database {
         return null;
     }
 
+
+    /**
+     * Retrieves a list of all restaurants from the database.
+     *
+     * @return An ArrayList of Restaurant objects.
+     */
     public ArrayList<Restaurant> getAllRestaurants() {
-        String getAllRestaurants = "SELECT * FROM restaurants";
-        ArrayList<Restaurant> listaRestaurants = new ArrayList<>();
+        String GET_ALL_RESTAURANTS_QUERY = "SELECT * FROM restaurants";
+        ArrayList<Restaurant> listRestaurants = new ArrayList<>();
 
         try {
-            Connection conn = conectar();
-            PreparedStatement restaurant = conn.prepareStatement(getAllRestaurants);
+            Connection conn = connect();
+            PreparedStatement restaurantQuery = conn.prepareStatement(GET_ALL_RESTAURANTS_QUERY);
 
-            ResultSet resultado = restaurant.executeQuery();
+            ResultSet result = restaurantQuery.executeQuery();
 
-            if (resultado.isBeforeFirst()) {
-                while (resultado.next()) {
-                    Address address = new Address(resultado.getInt(4),resultado.getInt(5));
-                    Restaurant restaurante = new Restaurant(resultado.getString(2), address);
-                    restaurante.setId(resultado.getInt(1));
-                    listaRestaurants.add(restaurante);
+            if (result.isBeforeFirst()) {
+                while (result.next()) {
+                    Address address = new Address(result.getInt(4),result.getInt(5));
+                    Restaurant restaurant = new Restaurant(result.getString(2), address);
+                    restaurant.setId(result.getInt(1));
+                    listRestaurants.add(restaurant);
                 }
             } else {
                 System.out.println("Não existem restaurantes cadastrados.");
             }
 
-            restaurant.close();
-            desconectar(conn);
+            restaurantQuery.close();
+            disconnect(conn);
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(-42);
         }
 
-        return listaRestaurants;
+        return listRestaurants;
     }
 
+
+    /**
+     * Retrieves a specific restaurant from the database based on its ID.
+     *
+     * @param id The ID of the restaurant.
+     * @return A Restaurant object if found, otherwise null.
+     */
     public Restaurant getRestaurant(int id) {
-        String getRestaurant = "SELECT * FROM restaurants WHERE id=?";
-        Restaurant restaurante = null;
+        String GET_RESTAURANT_QUERY = "SELECT * FROM restaurants WHERE id=?";
+        Restaurant restaurant = null;
 
         try {
-            Connection conn = conectar();
-            PreparedStatement restaurant = conn.prepareStatement(getRestaurant);
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(GET_RESTAURANT_QUERY);
 
-            restaurant.setInt(1, id);
+            preparedStatement.setInt(1, id);
 
 
-            ResultSet resultado = restaurant.executeQuery();
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (resultado.isBeforeFirst() && resultado.next()) {
-                Address address = new Address(resultado.getInt(4),resultado.getInt(5));
-                restaurante = new Restaurant(resultado.getString(2), address);
+            if (resultSet.isBeforeFirst() && resultSet.next()) {
+                Address address = new Address(resultSet.getInt(4),resultSet.getInt(5));
+                restaurant = new Restaurant(resultSet.getString(2), address);
             } else {
                 System.out.println("Não existe esse restaurante.");
             }
 
-            restaurant.close();
-            desconectar(conn);
+            preparedStatement.close();
+            disconnect(conn);
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(-42);
         }
 
-        return restaurante;
+        return restaurant;
     }
 
+
+    /**
+     * Retrieves a list of all active foods associated with a restaurant from the database.
+     *
+     * @param id The ID of the restaurant.
+     * @return An ArrayList of Food objects.
+     */
     public ArrayList<Food> getAllFoods(int id) {
-        String getAllFoods = "SELECT * FROM foods WHERE idRestaurant=? AND active=?";
+        String GET_ALL_FOODS_QUERY = "SELECT * FROM foods WHERE idRestaurant=? AND active=?";
         ArrayList<Food> listFoods = new ArrayList<>();
 
         try {
-            Connection conn = conectar();
-            PreparedStatement food = conn.prepareStatement(getAllFoods);
+            Connection conn = connect();
+            PreparedStatement preparedStatement = conn.prepareStatement(GET_ALL_FOODS_QUERY);
 
-            food.setInt(1, id);
-            food.setBoolean(2, true);
+            preparedStatement.setInt(1, id);
+            preparedStatement.setBoolean(2, true);
 
-            ResultSet resultado = food.executeQuery();
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (resultado.isBeforeFirst()) {
-                while (resultado.next()) {
-                    Food newFood = new Food(resultado.getString(3), resultado.getDouble(4));
-                    newFood.setId(resultado.getInt(1));
+            if (resultSet.isBeforeFirst()) {
+                while (resultSet.next()) {
+                    Food newFood = new Food(resultSet.getString(3), resultSet.getDouble(4));
+                    newFood.setId(resultSet.getInt(1));
                     listFoods.add(newFood);
                 }
             } else {
                 System.out.println("Não existem foods na loja.");
             }
 
-            food.close();
-            desconectar(conn);
+            preparedStatement.close();
+            disconnect(conn);
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(-42);
@@ -260,12 +334,20 @@ public class Database {
         return listFoods;
     }
 
+
+    /**
+     * Adds a new food item to the database for a specific restaurant.
+     *
+     * @param idRestaurant The ID of the restaurant.
+     * @param name         The name of the food item.
+     * @param preco        The price of the food item.
+     */
     public void addFood(int idRestaurant, String name, Double preco) {
-        String ADDFOOD = "INSERT INTO foods (idRestaurant, name, preco, active) VALUES (?, ?, ?, ?)";
+        String ADD_FOOD_QUERY = "INSERT INTO foods (idRestaurant, name, preco, active) VALUES (?, ?, ?, ?)";
 
         try {
-            Connection conn = conectar();
-            PreparedStatement insertFood = conn.prepareStatement(ADDFOOD);
+            Connection conn = connect();
+            PreparedStatement insertFood = conn.prepareStatement(ADD_FOOD_QUERY);
 
             insertFood.setInt(1, idRestaurant);
             insertFood.setString(2, name);
@@ -274,82 +356,103 @@ public class Database {
 
             insertFood.executeUpdate();
             insertFood.close();
-            desconectar(conn);
+            disconnect(conn);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-42);
         }
     }
 
+
+    /**
+     * Deactivates (soft deletes) a food item in the database.
+     *
+     * @param idFood The ID of the food item.
+     */
     public void deleteFood(int idFood) {
-        String SEARCH_FOR_ID = "SELECT * FROM foods WHERE id=?";
-        String DEACTIVATE_FOOD = "UPDATE foods SET active=? WHERE id=?";
+        String SEARCH_FOR_ID_QUERY = "SELECT * FROM foods WHERE id=?";
+        String DEACTIVATE_FOOD_QUERY = "UPDATE foods SET active=? WHERE id=?";
 
         try {
-            Connection conn = conectar();
-            PreparedStatement produto = conn.prepareStatement(SEARCH_FOR_ID);
+            Connection conn = connect();
+            PreparedStatement selectPreparedStatement = conn.prepareStatement(SEARCH_FOR_ID_QUERY);
 
-            produto.setInt(1, idFood);
+            selectPreparedStatement.setInt(1, idFood);
 
-            ResultSet resultado = produto.executeQuery();
+            ResultSet resultSet = selectPreparedStatement.executeQuery();
 
-            if (resultado.isBeforeFirst()) {
-                PreparedStatement update = conn.prepareStatement(DEACTIVATE_FOOD);
+            if (resultSet.isBeforeFirst()) {
+                PreparedStatement updatePreparedStatement = conn.prepareStatement(DEACTIVATE_FOOD_QUERY);
 
-                update.setBoolean(1, false);
-                update.setInt(2, idFood);
+                updatePreparedStatement.setBoolean(1, false);
+                updatePreparedStatement.setInt(2, idFood);
 
-                update.executeUpdate();
+                updatePreparedStatement.executeUpdate();
             } else {
                 System.out.println("Não existe produto com o ID informado.");
             }
 
-            produto.close();
-            desconectar(conn);
+            selectPreparedStatement.close();
+            disconnect(conn);
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(-42);
         }
     }
 
+
+    /**
+     * Adds a new order to the database.
+     *
+     * @param idUser      The ID of the user placing the order.
+     * @param date        The date of the order.
+     * @param totalPrice  The total price of the order.
+     */
     public void addOrder(int idUser, String date, double totalPrice) {
-        String ADD_ORDER = "INSERT INTO orders (idUser, dateOrder, priceTotal) VALUES (?, ?, ?)";
+        String ADD_ORDER_QUERY = "INSERT INTO orders (idUser, dateOrder, priceTotal) VALUES (?, ?, ?)";
 
         try {
-            Connection conn = conectar();
-            PreparedStatement addOrder = conn.prepareStatement(ADD_ORDER);
+            Connection conn = connect();
+            PreparedStatement addOrderPreparedStatement = conn.prepareStatement(ADD_ORDER_QUERY);
 
-            addOrder.setInt(1, idUser);
-            addOrder.setString(2, date);
-            addOrder.setDouble(3, totalPrice);
+            addOrderPreparedStatement.setInt(1, idUser);
+            addOrderPreparedStatement.setString(2, date);
+            addOrderPreparedStatement.setDouble(3, totalPrice);
 
-            addOrder.executeUpdate();
+            addOrderPreparedStatement.executeUpdate();
 
-            addOrder.close();
-            desconectar(conn);
+            addOrderPreparedStatement.close();
+            disconnect(conn);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-42);
         }
     }
 
+
+    /**
+     * Retrieves the ID of the last order placed in the database.
+     *
+     * @return The ID of the last order.
+     */
     public int getLastOrder() {
-        String GET_LAST_ORDER = "SELECT * FROM orders ORDER BY id DESC LIMIT 1;";
+        String GET_LAST_ORDER_QUERY = "SELECT * FROM orders ORDER BY id DESC LIMIT 1;";
         int idLastOrder = 0;
+
         try {
-            Connection conn = conectar();
-            PreparedStatement order = conn.prepareStatement(GET_LAST_ORDER);
+            Connection conn = connect();
+            PreparedStatement orderPreparedStatement = conn.prepareStatement(GET_LAST_ORDER_QUERY);
 
-            ResultSet resultado = order.executeQuery();
+            ResultSet resultSet = orderPreparedStatement.executeQuery();
 
-            if (resultado.isBeforeFirst() && resultado.next()) {
-                idLastOrder = resultado.getInt(1);
+            if (resultSet.isBeforeFirst() && resultSet.next()) {
+                idLastOrder = resultSet.getInt(1);
             } else {
                 System.out.println("Não existem restaurantes cadastrados.");
             }
 
-            order.close();
-            desconectar(conn);
+            orderPreparedStatement.close();
+            disconnect(conn);
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(-42);
@@ -358,28 +461,35 @@ public class Database {
         return idLastOrder;
     }
 
+
+    /**
+     * Retrieves a list of all orders for a specific user from the database.
+     *
+     * @param idUser The ID of the user.
+     * @return An ArrayList of OrderBank objects.
+     */
     public ArrayList<OrderBank> getAllOrders(int idUser) {
-        String getAllOrders = "SELECT * FROM orders WHERE idUser=? ORDER BY id DESC";
+        String GET_ALL_ORDERS_QUERY = "SELECT * FROM orders WHERE idUser=? ORDER BY id DESC";
         ArrayList<OrderBank> listOrderBanks = new ArrayList<>();
         try {
-            Connection conn = conectar();
-            PreparedStatement orders = conn.prepareStatement(getAllOrders);
+            Connection conn = connect();
+            PreparedStatement ordersPreparedStatement = conn.prepareStatement(GET_ALL_ORDERS_QUERY);
 
-            orders.setInt(1, idUser);
+            ordersPreparedStatement.setInt(1, idUser);
 
-            ResultSet resultado = orders.executeQuery();
+            ResultSet resultSet = ordersPreparedStatement.executeQuery();
 
-            if (resultado.isBeforeFirst()) {
-                while (resultado.next()) {
-                    OrderBank orderBank = new OrderBank(resultado.getInt(1), resultado.getString(3), resultado.getDouble(4));
+            if (resultSet.isBeforeFirst()) {
+                while (resultSet.next()) {
+                    OrderBank orderBank = new OrderBank(resultSet.getInt(1), resultSet.getString(3), resultSet.getDouble(4));
                     listOrderBanks.add(orderBank);
                 }
             } else {
                 System.out.println("Não existem foods na loja.");
             }
 
-            orders.close();
-            desconectar(conn);
+            ordersPreparedStatement.close();
+            disconnect(conn);
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(-42);
@@ -388,75 +498,118 @@ public class Database {
         return listOrderBanks;
     }
 
+
+    /**
+     * Associates a food item with a specific order in the database.
+     *
+     * @param idOrder  The ID of the order.
+     * @param idFood   The ID of the food item.
+     * @param quantity The quantity of the food item in the order.
+     */
     public void setOrderFood(int idOrder, int idFood, int quantity) {
-        String ADD_ORDER_FOOD = "INSERT INTO orderFoods (idOrder, idFood, quantity) VALUES (?, ?, ?)";
+        String ADD_ORDER_FOOD_QUERY = "INSERT INTO orderFoods (idOrder, idFood, quantity) VALUES (?, ?, ?)";
 
         try {
-            Connection conn = conectar();
-            PreparedStatement addOrder = conn.prepareStatement(ADD_ORDER_FOOD);
+            Connection conn = connect();
+            PreparedStatement addOrderPreparedStatement = conn.prepareStatement(ADD_ORDER_FOOD_QUERY);
 
-            addOrder.setInt(1, idOrder);
-            addOrder.setInt(2, idFood);
-            addOrder.setInt(3, quantity);
+            addOrderPreparedStatement.setInt(1, idOrder);
+            addOrderPreparedStatement.setInt(2, idFood);
+            addOrderPreparedStatement.setInt(3, quantity);
 
-            addOrder.executeUpdate();
+            addOrderPreparedStatement.executeUpdate();
 
-            addOrder.close();
-            desconectar(conn);
+            addOrderPreparedStatement.close();
+            disconnect(conn);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-42);
         }
     }
 
+
+    /**
+     * Retrieves a list of food items associated with a specific order from the database.
+     *
+     * @param idOrder The ID of the order.
+     * @return An ArrayList containing ArrayLists of Objects representing the food items in the order.
+     */
     public ArrayList<ArrayList<Object>> getSpecificOrder(int idOrder) {
-        String SPECIFIC_ORDER = "SELECT * FROM orderFoods WHERE idOrder=?";
-
+        String ALL_FOODS_ORDER_QUERY = """
+                SELECT foods.*, OrderFoods.quantity
+                FROM foods
+                JOIN OrderFoods ON OrderFoods.idFood = foods.id
+                WHERE OrderFoods.idOrder = ?;
+                """;
         ArrayList<ArrayList<Object>> listItemsOrder = new ArrayList<>();
+
         try {
-            Connection conn = conectar();
-            PreparedStatement foodOrder = conn.prepareStatement(SPECIFIC_ORDER);
+            Connection conn = connect();
+            PreparedStatement foodOrderPreparedStatement = conn.prepareStatement(ALL_FOODS_ORDER_QUERY);
 
-            foodOrder.setInt(1, idOrder);
+            foodOrderPreparedStatement.setInt(1, idOrder);
 
-            ResultSet resultado = foodOrder.executeQuery();
+            ResultSet resultSet = foodOrderPreparedStatement.executeQuery();
 
-            if (resultado.isBeforeFirst()) {
-                while (resultado.next()) {
+            if (resultSet.isBeforeFirst()) {
+                while (resultSet.next()) {
                     ArrayList<Object> itemOrder = new ArrayList<>();
+                    Food food = new Food(resultSet.getString(3), resultSet.getDouble(4));
 
-                    int idFood = resultado.getInt(3);
+                    itemOrder.add(food);
+                    itemOrder.add(resultSet.getInt(6));
 
-                    String GET_FOOD = "SELECT * FROM foods WHERE id=?";
-
-                    PreparedStatement food = conn.prepareStatement(GET_FOOD);
-
-                    food.setInt(1, idFood);
-
-                    ResultSet resultadoFood = food.executeQuery();
-
-                    if (resultadoFood.next()) {
-                        Food lanche = new Food(resultadoFood.getString(3), resultadoFood.getDouble(4));
-
-                        itemOrder.add(lanche);
-                        itemOrder.add(resultado.getInt(4));
-
-                        listItemsOrder.add(itemOrder);
-
-                    }
-                    resultadoFood.close();
+                    listItemsOrder.add(itemOrder);
                 }
-            } else {
-                System.out.println("Não existem foods na loja.");
             }
 
-            foodOrder.close();
-            desconectar(conn);
+            foodOrderPreparedStatement.close();
+            disconnect(conn);
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(-42);
         }
 
         return listItemsOrder;
+    }
+
+
+    /**
+     * Retrieves the name of the restaurant associated with a specific order from the database.
+     *
+     * @param idOrder The ID of the order.
+     * @return The name of the restaurant associated with the order.
+     */
+    public String getRestaurantOrder(int idOrder) {
+        String GET_RESTAURANT_NAME = """
+                SELECT restaurants.name
+                FROM restaurants
+                INNER JOIN foods ON foods.idRestaurant = restaurants.id
+                INNER JOIN orderFoods ON orderfoods.idFood = foods.id
+                WHERE orderfoods.idOrder = ?;""";
+
+        String nameRestaurantString = "";
+        try {
+            Connection conn = connect();
+            PreparedStatement nameRestaurant = conn.prepareStatement(GET_RESTAURANT_NAME);
+
+            nameRestaurant.setInt(1, idOrder);
+
+            ResultSet result = nameRestaurant.executeQuery();
+
+            if (result.isBeforeFirst() && result.next()) {
+                nameRestaurantString = result.getString(1);
+            } else {
+                System.out.println("Erro.");
+            }
+
+            nameRestaurant.close();
+            disconnect(conn);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(-42);
+        }
+
+        return nameRestaurantString;
     }
 }

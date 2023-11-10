@@ -13,10 +13,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * The SpecificOrderLayout class represents a page for viewing details of a specific order in historic orders in the application.
+ * see the specific old order you placed, along with its details.
+ */
 public class SpecificOrderLayout extends JPanel {
+    // OrderBank instance representing the specific order
     public OrderBank orderBank;
     public Delivery delivery;
     public Application application;
+
+    /**
+     * Constructs a SpecificOrderLayout with the specified delivery and application instances.
+     *
+     * @param delivery    The Delivery instance associated with this specific order layout.
+     * @param application The Application instance containing the main logic of the application.
+     */
     public SpecificOrderLayout(Delivery delivery, Application application) {
         this.delivery = delivery;
         this.application = application;
@@ -26,10 +38,18 @@ public class SpecificOrderLayout extends JPanel {
         this.setOpaque(true);
     }
 
+    /**
+     * Sets the OrderBank instance representing the specific order.
+     *
+     * @param orderBank The OrderBank instance representing the specific order.
+     */
     public void setOrder(OrderBank orderBank) {
         this.orderBank = orderBank;
     }
 
+    /**
+     * Creates and displays components for the specific order layout.
+     */
     public void createComponents() {
         this.removeAll();
         this.repaint();
@@ -45,6 +65,7 @@ public class SpecificOrderLayout extends JPanel {
 
         Database database = new Database();
         ArrayList<ArrayList<Object>> listItemsInOrder = database.getSpecificOrder(orderBank.id);
+        String restaurantName = database.getRestaurantOrder(orderBank.id);
 
         if (!listItemsInOrder.isEmpty()) {
             double totalPriceValue = 0;
@@ -75,6 +96,11 @@ public class SpecificOrderLayout extends JPanel {
 
             Line line2 = new Line(620);
             this.add(line2);
+
+            JLabel restaurant = new JLabel("Restaurant: "+ restaurantName,  SwingConstants.LEFT);
+            restaurant.setBounds(125, 650, 500, 40);
+            restaurant.setFont(new Font("Arial", Font.BOLD,17));
+            this.add(restaurant);
 
             JLabel totalPrice = new JLabel("Total price: "+ totalPriceValue,  SwingConstants.RIGHT);
             totalPrice.setBounds(125, 650, 500, 40);
