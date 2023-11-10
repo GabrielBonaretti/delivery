@@ -64,15 +64,15 @@ public class OrderLayout extends JPanel {
             panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
             // Iterate through items in the order cart and create corresponding labels
-            for (ArrayList<Object> pedidoLanche: this.application.order.cart) {
-                Food food = (Food) pedidoLanche.get(0);
-                int qntLanche = (int) pedidoLanche.get(1);
+            for (ArrayList<Object> orderFood: this.application.order.cart) {
+                Food food = (Food) orderFood.get(0);
+                int quantityFood = (int) orderFood.get(1);
 
                 LabelOrderLayoutFood labelOrderLayoutFood = new LabelOrderLayoutFood(
                         application,
                         food,
-                        qntLanche,
-                        pedidoLanche,
+                        quantityFood,
+                        orderFood,
                         this
                 );
 
@@ -101,7 +101,7 @@ public class OrderLayout extends JPanel {
 
         // Calculate and display the total price of items in the order cart
         double totalPriceValue = application.order.getSumValues();
-        JLabel totalPrice = new JLabel("Total price: "+ totalPriceValue);
+        JLabel totalPrice = new JLabel("Total price: "+ String.format("%.2f", totalPriceValue));
         totalPrice.setBounds(125, 650, 500, 40);
         totalPrice.setFont(new Font("Arial", Font.BOLD,15));
         this.add(totalPrice);
@@ -115,15 +115,18 @@ public class OrderLayout extends JPanel {
             // Get the current date and time
             Date data = new Date();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat time = DateFormat.getTimeInstance();
+            String dataFormated = sdf.format(data) + " " + time.format(data);
 
-            DateFormat hora = DateFormat.getTimeInstance();
-            String dataFormated = sdf.format(data) + " " + hora.format(data);
+            // Print order
+            application.order.printOrder(dataFormated, totalPriceValue);
 
             // Save the order with the current date, time, and total price
             application.order.saveOrder(dataFormated, totalPriceValue);
 
             // Refresh the order requests section
             createRequests();
+
         });
 
         this.add(doOrder);

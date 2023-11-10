@@ -1,11 +1,13 @@
 package src.UI;
 
+import src.Database.Database;
 import src.Entities.Application;
 import src.UI.Pages.Register;
 import src.UI.Pages.Delivery;
 import src.UI.Pages.Login;
 
 import javax.swing.*;
+import javax.xml.crypto.Data;
 
 /**
  * The Screen class represents the main frame of the application, managing different pages.
@@ -27,6 +29,10 @@ public class Screen extends JFrame{
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setLayout(null);
+
+        // Create tables in database if dont exists
+        Database database = new Database();
+        database.createDatabase();
 
         // Initialize the application
         this.application = new Application();

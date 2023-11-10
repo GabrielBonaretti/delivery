@@ -16,12 +16,15 @@ public class Database {
      *
      * @return A Connection object representing the database connection.
      */
-    public Connection connect() {
+    public Connection connect(boolean connectDatabase) {
         // Database connection parameters
         String CLASS_DRIVER = "com.mysql.cj.jdbc.Driver";
         String USER = "root";
         String PASSWORD = "";
-        String URL_SERVER = "jdbc:mysql://localhost:3306/delivery?useSSL=false";
+//        String URL_SERVER = "jdbc:mysql://localhost:3306";
+        String BASE_URL = "jdbc:mysql://localhost:3306";
+        String URL_SERVER = connectDatabase ? BASE_URL + "/delivery?useSSL=false" : BASE_URL;;
+
 
         try {
             // Load the MySQL JDBC driver and establish a connection
@@ -40,7 +43,6 @@ public class Database {
         }
     }
 
-
     /**
      * Closes the database connection.
      *
@@ -57,6 +59,92 @@ public class Database {
         }
     }
 
+    /**
+     * Create database an tables if not exists
+     * */
+    public void createDatabase() {
+        String CREATE_DATABASE_QUERY = """
+               create database if not exists delivery;
+               """;
+
+        String SELECT_DATABASE_QUERY = """
+               use delivery;
+               """;
+
+        String CREATE_TABLE_USERS_QUERY = """
+                create table if NOT exists users (
+                    id int auto_increment primary key,
+                    name varchar(100) not null unique,
+                    cpf varchar(255) not null,
+                    positionX int not null,
+                    positionY int not null,
+                    password varchar(255) not null
+                );
+                """;
+
+        String CREATE_TABLE_RESTAURANTS_QUERY = """
+                create table if NOT exists restaurants (
+                    id int auto_increment primary key,
+                    name varchar(100) not null unique,
+                    cnpj varchar(25) not null,
+                    positionX int not null,
+                    positionY int not null,
+                    password varchar(255) not null
+                );
+                """;
+
+        String CREATE_TABLE_ORDERS_QUERY = """
+                create table if NOT exists orders (
+                    id int auto_increment primary key,
+                    idUser int not null,
+                    dateOrder datetime not null,
+                    priceTotal DOUBLE NOT NULL,
+                	constraint fkUsers foreign key (idUser) references users(id)
+                );
+                """;
+
+        String CREATE_TABLE_FOODS_QUERY = """
+                create table if NOT exists foods (
+                	id int auto_increment primary key,
+                    idRestaurant int not null,
+                    name varchar(100) not null,
+                    preco double not null,
+                    active boolean not null,
+                	constraint fkRestaurant foreign key (idRestaurant) references restaurants(id)
+                );
+                """;
+
+        String CREATE_TABLE_ORDER_FOODS_QUERY = """
+                create table if NOT exists OrderFoods (
+                    id int auto_increment primary key,
+                    idOrder int not null,
+                    idFood int not null,
+                    quantity INT NOT NULL,
+                	constraint fkOrder foreign key (idOrder) references orders(id),
+                	constraint fkFood foreign key (idFood) references foods(id)
+                );
+                """;
+
+        try {
+            Connection conn = connect(false);
+            Statement statement = conn.createStatement();
+
+            statement.executeUpdate(CREATE_DATABASE_QUERY);
+            statement.executeUpdate(SELECT_DATABASE_QUERY);
+            statement.executeUpdate(CREATE_TABLE_USERS_QUERY);
+            statement.executeUpdate(CREATE_TABLE_RESTAURANTS_QUERY);
+            statement.executeUpdate(CREATE_TABLE_ORDERS_QUERY);
+            statement.executeUpdate(CREATE_TABLE_FOODS_QUERY);
+            statement.executeUpdate(CREATE_TABLE_ORDER_FOODS_QUERY);
+
+            statement.close();
+            disconnect(conn);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(-42);
+        }
+    }
 
     /**
      * Creates a new user in the database.
@@ -72,7 +160,7 @@ public class Database {
         String INSERT_QUERY = "INSERT INTO users (name, cpf, positionX, positionY, password) VALUES (?, ?, ?, ?, ?)";
 
         try {
-            Connection conn = connect();
+            Connection conn = connect(true);
             PreparedStatement save = conn.prepareStatement(INSERT_QUERY);
 
             save.setString(1, name);
@@ -107,7 +195,7 @@ public class Database {
         String INSERT_QUERY = "INSERT INTO restaurants (name, cnpj, positionX, positionY, password) VALUES (?, ?, ?, ?, ?)";
 
         try {
-            Connection conn = connect();
+            Connection conn = connect(true);
             PreparedStatement save = conn.prepareStatement(INSERT_QUERY);
 
             save.setString(1, name);
@@ -140,7 +228,7 @@ public class Database {
         String VERIFY_QUERY = "SELECT * FROM users WHERE name=? AND password=?";
 
         try {
-            Connection conn = connect();
+            Connection conn = connect(true);
             PreparedStatement user = conn.prepareStatement(VERIFY_QUERY);
 
             user.setString(1, name);
@@ -187,7 +275,7 @@ public class Database {
         String VERIFY_QUERY = "SELECT * FROM restaurants WHERE name=? AND password=?";
 
         try {
-            Connection conn = connect();
+            Connection conn = connect(true);
             PreparedStatement user = conn.prepareStatement(VERIFY_QUERY);
 
             user.setString(1, name);
@@ -231,7 +319,7 @@ public class Database {
         ArrayList<Restaurant> listRestaurants = new ArrayList<>();
 
         try {
-            Connection conn = connect();
+            Connection conn = connect(true);
             PreparedStatement restaurantQuery = conn.prepareStatement(GET_ALL_RESTAURANTS_QUERY);
 
             ResultSet result = restaurantQuery.executeQuery();
@@ -269,7 +357,7 @@ public class Database {
         Restaurant restaurant = null;
 
         try {
-            Connection conn = connect();
+            Connection conn = connect(true);
             PreparedStatement preparedStatement = conn.prepareStatement(GET_RESTAURANT_QUERY);
 
             preparedStatement.setInt(1, id);
@@ -306,7 +394,7 @@ public class Database {
         ArrayList<Food> listFoods = new ArrayList<>();
 
         try {
-            Connection conn = connect();
+            Connection conn = connect(true);
             PreparedStatement preparedStatement = conn.prepareStatement(GET_ALL_FOODS_QUERY);
 
             preparedStatement.setInt(1, id);
@@ -346,7 +434,7 @@ public class Database {
         String ADD_FOOD_QUERY = "INSERT INTO foods (idRestaurant, name, preco, active) VALUES (?, ?, ?, ?)";
 
         try {
-            Connection conn = connect();
+            Connection conn = connect(true);
             PreparedStatement insertFood = conn.prepareStatement(ADD_FOOD_QUERY);
 
             insertFood.setInt(1, idRestaurant);
@@ -374,7 +462,7 @@ public class Database {
         String DEACTIVATE_FOOD_QUERY = "UPDATE foods SET active=? WHERE id=?";
 
         try {
-            Connection conn = connect();
+            Connection conn = connect(true);
             PreparedStatement selectPreparedStatement = conn.prepareStatement(SEARCH_FOR_ID_QUERY);
 
             selectPreparedStatement.setInt(1, idFood);
@@ -412,7 +500,7 @@ public class Database {
         String ADD_ORDER_QUERY = "INSERT INTO orders (idUser, dateOrder, priceTotal) VALUES (?, ?, ?)";
 
         try {
-            Connection conn = connect();
+            Connection conn = connect(true);
             PreparedStatement addOrderPreparedStatement = conn.prepareStatement(ADD_ORDER_QUERY);
 
             addOrderPreparedStatement.setInt(1, idUser);
@@ -440,7 +528,7 @@ public class Database {
         int idLastOrder = 0;
 
         try {
-            Connection conn = connect();
+            Connection conn = connect(true);
             PreparedStatement orderPreparedStatement = conn.prepareStatement(GET_LAST_ORDER_QUERY);
 
             ResultSet resultSet = orderPreparedStatement.executeQuery();
@@ -472,7 +560,7 @@ public class Database {
         String GET_ALL_ORDERS_QUERY = "SELECT * FROM orders WHERE idUser=? ORDER BY id DESC";
         ArrayList<OrderBank> listOrderBanks = new ArrayList<>();
         try {
-            Connection conn = connect();
+            Connection conn = connect(true);
             PreparedStatement ordersPreparedStatement = conn.prepareStatement(GET_ALL_ORDERS_QUERY);
 
             ordersPreparedStatement.setInt(1, idUser);
@@ -510,7 +598,7 @@ public class Database {
         String ADD_ORDER_FOOD_QUERY = "INSERT INTO orderFoods (idOrder, idFood, quantity) VALUES (?, ?, ?)";
 
         try {
-            Connection conn = connect();
+            Connection conn = connect(true);
             PreparedStatement addOrderPreparedStatement = conn.prepareStatement(ADD_ORDER_FOOD_QUERY);
 
             addOrderPreparedStatement.setInt(1, idOrder);
@@ -544,7 +632,7 @@ public class Database {
         ArrayList<ArrayList<Object>> listItemsOrder = new ArrayList<>();
 
         try {
-            Connection conn = connect();
+            Connection conn = connect(true);
             PreparedStatement foodOrderPreparedStatement = conn.prepareStatement(ALL_FOODS_ORDER_QUERY);
 
             foodOrderPreparedStatement.setInt(1, idOrder);
@@ -590,7 +678,7 @@ public class Database {
 
         String nameRestaurantString = "";
         try {
-            Connection conn = connect();
+            Connection conn = connect(true);
             PreparedStatement nameRestaurant = conn.prepareStatement(GET_RESTAURANT_NAME);
 
             nameRestaurant.setInt(1, idOrder);

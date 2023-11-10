@@ -39,7 +39,7 @@ public class LabelOrder extends JLabel {
         this.add(date);
 
         // Label to display the total price of the order
-        JLabel price = new JLabel("Preço total: R$ "+ orderBank.totalPrice);
+        JLabel price = new JLabel("Preço total: R$ "+ String.format("%.2f", orderBank.totalPrice));
         price.setFont(new Font("Arial", Font.BOLD,15));
         price.setBounds(250, 0, 200, 50);
         this.add(price);
