@@ -1,7 +1,13 @@
 package org.delivery.Entities;
 
+import org.delivery.DAO.RestaurantDAO;
+import org.delivery.DAO.UserDAO;
 import org.delivery.Database.Database;
+import org.delivery.EntitiesBD.RestaurantDB;
+import org.delivery.EntitiesBD.UserDB;
+import org.delivery.Util.JPAUtil;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 
 
@@ -21,12 +27,14 @@ public class Application {
     // The database instance for interacting with the underlying database.
     public Database database;
 
+    private EntityManager entityManager;
 
     /**
      * Constructs an Application object with a new Database instance.
      */
     public Application() {
         this.database = new Database();
+        this.entityManager = JPAUtil.getEntityManager();
     }
 
 
@@ -46,14 +54,19 @@ public class Application {
         int positionY,
         String password
     ) {
-        database.createRestaurant(
-            name,
-            cnpj,
-            positionX,
-            positionY,
-            password
-        );
-
+        RestaurantDAO restaurantDAO = new RestaurantDAO(entityManager);
+        RestaurantDB restaurantDB = new RestaurantDB(name, cnpj, positionX, positionY, password);
+        entityManager.getTransaction().begin();
+        restaurantDAO.create(restaurantDB);
+        entityManager.getTransaction().commit();
+        entityManager.close();
+//        database.createRestaurant(
+//            name,
+//            cnpj,
+//            positionX,
+//            positionY,
+//            password
+//        );
     }
 
 
@@ -73,13 +86,19 @@ public class Application {
         int positionY,
         String password
     ) {
-        database.createUser(
-            name,
-            cpf,
-            positionX,
-            positionY,
-            password
-        );
+        UserDAO userDAO = new UserDAO(entityManager);
+        UserDB user = new UserDB(name, cpf, positionX, positionY, password);
+        entityManager.getTransaction().begin();
+        userDAO.create(user);
+        entityManager.getTransaction().commit();
+        entityManager.close();
+//        database.createUser(
+//            name,
+//            cpf,
+//            positionX,
+//            positionY,
+//            password
+//        );
     }
 
 
